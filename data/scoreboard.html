@@ -6,13 +6,13 @@
     <script type="text/javascript" src="./js/moment-with-locales.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/jquery.minicolors.css">
-    <title>7 Segment Clock</title>
+    <title>Placar Wifi</title>
 </head>
 
 <body>
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-        <a class="navbar-brand" href="./index.html">7 Segment Clock</a>
+        <a class="navbar-brand" href="./index.html">Placar Wifi</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -20,19 +20,19 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="./index.html">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="./index.html">Início <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./datetime.html">Set Date/Time</a>
+                    <a class="nav-link" href="./datetime.html">Ajustar Data/ Hora</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./countdown.html">Countdown Timer</a>
+                    <a class="nav-link" href="./countdown.html">Timer Decrescente</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./scoreboard.html">Scoreboard</a>
+                    <a class="nav-link" href="./scoreboard.html">Placar</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./temperature.html">Temperature</a>
+                    <a class="nav-link" href="./temperature.html">Temperatura</a>
                 </li>
         </div>
     </nav>
@@ -44,34 +44,34 @@
                 <div class="card-body">
 
                     <form>
-                        <label>Scoreboard</label>
+                        <label>Placar</label>
 
                         <div class="form-row">
                             <div class="col input-group mb-3">
-                                <button type="button" class="btn btn-info btn-block" onclick="upleft();">Up</button>
+                                <button type="button" class="btn btn-info btn-block" onclick="upleft();">+</button>
                             </div>
 
                             <div class="col input-group mb-3">
-                                <button type="button" class="btn btn-info btn-block" onclick="upright();">Up</button>
+                                <button type="button" class="btn btn-info btn-block" onclick="upright();">+</button>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="col input-group mb-3">
-                                <input type="text" class="form-control" value="20" id="scoreboardLeft">
+                                <input type="text" class="form-control" value="0" id="scoreboardLeft">
                                
                             </div>
                             <div class="col input-group mb-3">
-                                <input type="text" class="form-control" value="20" id="scoreboardRight">
+                                <input type="text" class="form-control" value="0" id="scoreboardRight">
                                 
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="col input-group mb-3">
-                                <button type="button" class="btn btn-info btn-block" onclick="downleft();">Down</button>
+                                <button type="button" class="btn btn-info btn-block" onclick="downleft();">-</button>
                             </div>
 
                             <div class="col input-group mb-3">
-                                <button type="button" class="btn btn-info btn-block" onclick="downright();">Down</button>
+                                <button type="button" class="btn btn-info btn-block" onclick="downright();">-</button>
                             </div>
                         </div>
                         <div class="form-row">
@@ -88,18 +88,17 @@
                         <div>
                             
                             <div>
-                                <button type="button" class="btn btn-primary" onclick="showScoreboard()">Show Scoreboard</button>
+                                <button type="button" class="btn btn-primary" onclick="showScoreboard()">Mostrar Placar</button>
                             </div>
 
                             <div style="margin-top: 12px;">
-                                <button type="button" class="btn btn-primary" onclick="showClock()">Show
-                                    Clock</button>
+                                <button type="button" class="btn btn-primary" onclick="showClock()">Mostrar Relógio</button>
                             </div>
 
                             <div id="validNrs" style="display: none;">
                                 <br />
                                 <div class="alert alert-danger" role="alert">
-                                    Please enter valid values!
+                                    Use valores válidos!
                                 </div>
                             </div>
                         </div>

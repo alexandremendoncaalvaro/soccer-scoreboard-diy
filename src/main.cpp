@@ -9,6 +9,6 @@ void setup() {
 }
 
 void loop() {
-  wifiPortal.handleClient();
   systemClock.getTime();
+  wifiPortal.handleClient();
 }

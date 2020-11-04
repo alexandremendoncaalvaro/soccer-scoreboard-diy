@@ -7,13 +7,13 @@
     <script type="text/javascript" src="./js/moment-with-locales.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/jquery.minicolors.css">
-    <title>7 Segment Clock</title>
+    <title>Placar Wifi</title>
 </head>
 
 <body>
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-        <a class="navbar-brand" href="./index.html">7 Segment Clock</a>
+        <a class="navbar-brand" href="./index.html">Placar Wifi</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -21,19 +21,19 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="./index.html">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="./index.html">Início <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./datetime.html">Set Date/Time</a>
+                    <a class="nav-link" href="./datetime.html">Ajustar Data/ Hora</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./countdown.html">Countdown Timer</a>
+                    <a class="nav-link" href="./countdown.html">Timer Decrescente</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./scoreboard.html">Scoreboard</a>
+                    <a class="nav-link" href="./scoreboard.html">Placar</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./temperature.html">Temperature</a>
+                    <a class="nav-link" href="./temperature.html">Temperatura</a>
                 </li>
         </div>
     </nav>
@@ -46,7 +46,7 @@
 
 
                     <form>
-                        <label>Time</label>
+                        <label>Timer</label>
                         <div class="form-row">
 
                             <div class="col input-group mb-3">
@@ -57,7 +57,7 @@
                             </div>
 
                             <div class="col input-group mb-3">
-                                <input type="text" class="form-control" value="15" id="minutes">
+                                <input type="text" class="form-control" value="45" id="minutes">
                                 <div class="input-group-append">
                                     <span class="input-group-text">m</span>
                                 </div>
@@ -73,23 +73,21 @@
 
                         <div>
                             <div class="form-group">
-                                <label for="inline">LED Color</label>
+                                <label for="inline">Cor do LED</label>
                                 <input type="text" id="inline" class="form-control demo" value="#00ff00">
                             </div>
                             <div>
-                                <button type="button" class="btn btn-primary" onclick="startCountdown()">Start Countdown
-                                    Timer</button>
+                                <button type="button" class="btn btn-primary" onclick="startCountdown()">Iniciar Timer</button>
                             </div>
 
                             <div style="margin-top: 12px;">
-                                <button type="button" class="btn btn-primary" onclick="showClock()">Show
-                                    Clock</button>
+                                <button type="button" class="btn btn-primary" onclick="showClock()">Mostrar Relógio</button>
                             </div>
 
                             <div id="validNrs" style="display: none;">
                                 <br />
                                 <div class="alert alert-danger" role="alert">
-                                    Please enter valid values!
+                                    Insira formatos válidos!
                                 </div>
                             </div>
                         </div>
