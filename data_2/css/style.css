@@ -1,0 +1,11 @@
+/* --- config.html ---*/
+#fixed-color-picker {
+    display: table;
+    padding: 4px;
+    border: 1px solid darkslategrey;
+}
+
+#input-led-color {
+    font-family: 'Courier New', Courier, monospace;
+    text-transform: uppercase;
+}

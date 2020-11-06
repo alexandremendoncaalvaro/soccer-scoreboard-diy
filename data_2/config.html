@@ -12,16 +12,37 @@
         <!-- The Band Section -->
         <div class="w3-container w3-content w3-center w3-padding-16" style="max-width:800px" id="configurations">
             <h2 class="w3-wide">CONFIGURAÇÕES</h2>
-            <form class="w3-container w3-card-4">
+            <div id="color-picker-container" class="w3-container w3-card-4">
                 <p class="w3-opacity"><i>Cor do LED</i></p>
-                <p><input type="text" id="inline" class="w3-input w3-border" data-inline="true" value="#ff0000"></p>
-                <p><button class="w3-button w3-border" onclick="setColor()">Atualizar Cor</button></p>
-            </form>
+                <p>
+                    <div id="fixed-color-picker" class="w3-container w3-content w3-center"></div>
+                </p>
+                <!-- <p><a id="input-led-color" class="w3-button w3-border">#ff0000</a></p> -->
+            </div>
 
         </div>
     </div>
 
     <script type="module" src="./js/index.js"></script>
+    <script src="./js/vanilla-picker.min.js"></script>
+    <script>
+        const parentFixed = document.querySelector('#fixed-color-picker')
+        const parentFixed = document.querySelector('#color-picker-cont')
+        // const inputLedColor = document.querySelector('#input-led-color')
+
+        pickerFixed = new Picker({
+            parent: parentFixed,
+            popup: false,
+            alpha: false,
+            editor: true,
+            color: 'white',
+            onChange: function (color) {
+                parentFixed.style.backgroundColor = color.rgbaString
+                // inputLedColor.textContent = color.hex.substring(0, 7)
+            },
+        })
+
+    </script>
 </body>
 
 </html>
