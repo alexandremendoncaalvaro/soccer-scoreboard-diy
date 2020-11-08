@@ -12,8 +12,8 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug",
-            "executable": "/home/alexandre/dev/soccer-scoreboard-diy/.pio/build/d1_mini/firmware.elf",
-            "toolchainBinDir": "/home/alexandre/.platformio/packages/toolchain-xtensa/bin",
+            "executable": "c:/Users/ALEXAN~1.ALV/dev/soccer-scoreboard-diy/.pio/build/d1_mini/firmware.elf",
+            "toolchainBinDir": "C:/Users/alexandre.alvaro/.platformio/packages/toolchain-xtensa/bin",
             "preLaunchTask": {
                 "type": "PlatformIO",
                 "task": "Pre-Debug"
@@ -24,8 +24,8 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (skip Pre-Debug)",
-            "executable": "/home/alexandre/dev/soccer-scoreboard-diy/.pio/build/d1_mini/firmware.elf",
-            "toolchainBinDir": "/home/alexandre/.platformio/packages/toolchain-xtensa/bin",
+            "executable": "c:/Users/ALEXAN~1.ALV/dev/soccer-scoreboard-diy/.pio/build/d1_mini/firmware.elf",
+            "toolchainBinDir": "C:/Users/alexandre.alvaro/.platformio/packages/toolchain-xtensa/bin",
             "internalConsoleOptions": "openOnSessionStart"
         }
     ]

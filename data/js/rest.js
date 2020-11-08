@@ -1,5 +1,23 @@
 const post = (url, data) => {
-    return fetch(url, { method: 'POST', body: JSON.stringify(data) })
+    var ajax = new XMLHttpRequest();
+
+    ajax.open("POST", url, true);
+    ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    ajax.send(JSON.stringify(data));
+
+    ajax.onreadystatechange = function () {
+
+        if (ajax.readyState == 4 && ajax.status == 200) {
+
+            var data = ajax.responseText;
+
+            console.log(data);
+        }
+    }
+
+    // return fetch(url, { method: 'POST', body: JSON.stringify(data) })
+
 }
 
 const hexToRgb = hex => {
@@ -22,4 +40,4 @@ const setColor = colorHex => {
     post('/color', color)
 }
 
-export { setColor }
+// export { setColor }

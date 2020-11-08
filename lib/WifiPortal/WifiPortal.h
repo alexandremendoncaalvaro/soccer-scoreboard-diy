@@ -19,14 +19,18 @@ private:
     const int _serverPort = 80;
     const byte _dnsPort = 53;
 
-    byte r_val = 255;
-    byte g_val = 0;
-    byte b_val = 0;
+    byte _valueR = 255;
+    byte _valueG = 0;
+    byte _valueB = 0;
 
-    ESP8266WebServer server;
-    ESP8266HTTPUpdateServer httpUpdateServer;
-    DNSServer dnsServer; 
+    std::unique_ptr<ESP8266WebServer> server;
+    std::unique_ptr<DNSServer> dnsServer;
+    // ESP8266HTTPUpdateServer httpUpdateServer;
+
     bool beginFileSystem();
+    // void handleGenericArgs();
+    void handleConfig();
+    void handleNotFound();
 
 public:
     bool begin();

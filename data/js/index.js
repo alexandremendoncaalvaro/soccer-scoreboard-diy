@@ -1,6 +1,6 @@
-import { toggleMobileMenu } from './menu.mjs'
-import { includeAllHtml } from './dynamic-load.mjs'
-import { setColor } from './rest.mjs'
+// import { toggleMobileMenu } from './menu.js'
+// import { includeAllHtml } from './dynamic-load.js'
+// import { setColor } from './rest.js'
 
 const dynamicLoad = () => {
     const afterLoad = () => {

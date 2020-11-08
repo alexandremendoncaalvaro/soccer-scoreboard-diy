@@ -3,12 +3,14 @@
 #include "SystemClock.h"
 #include "WifiPortal.h"
 
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   wifiPortal.begin();
 }
 
-void loop() {
+void loop()
+{
   systemClock.getTime();
   wifiPortal.handleClient();
 }
