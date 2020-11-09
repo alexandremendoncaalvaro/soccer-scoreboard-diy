@@ -1,5 +1,10 @@
 #include "SystemClock.h"
 
+void SystemClock::set_debug(bool debug)
+{
+    _debug = debug;
+}
+
 time_t SystemClock::getTime()
 {
     auto currentTime = now();
@@ -21,35 +26,33 @@ void SystemClock::printTime()
 
     if (RTC.read(tm))
     {
-        Serial.print("Ok, Time = ");
+        Serial.print(F("[RTC] Ok, Time = "));
         printTwoDigits(tm.Hour);
-        Serial.write(':');
+        Serial.print(F(":"));
         printTwoDigits(tm.Minute);
-        Serial.write(':');
+        Serial.print(F(":"));
         printTwoDigits(tm.Second);
-        Serial.print(", Date (D/M/Y) = ");
-        Serial.print(tm.Day);
-        Serial.write('/');
-        Serial.print(tm.Month);
-        Serial.write('/');
-        Serial.print(tmYearToCalendar(tm.Year));
-        Serial.println();
+        Serial.print(F(", Date (DD/MM/YYYY) = "));
+        printTwoDigits(tm.Day);
+        Serial.print(F("/"));
+        printTwoDigits(tm.Month);
+        Serial.print(F("/"));
+        Serial.println(tmYearToCalendar(tm.Year));
     }
     else
     {
         if (RTC.chipPresent())
         {
-            Serial.println("The DS1307 is stopped.  Please run the SetTime");
-            Serial.println("example to initialize the time and begin running.");
-            Serial.println();
-        }
+            Serial.println(F("The DS1307 is stopped.  Please run the SetTime"));
+            Serial.println(F("example to initialize the time and begin running."));
+                }
         else
         {
-            Serial.println("DS1307 read error!  Please check the circuitry.");
-            Serial.println();
+            Serial.println(F("DS1307 read error!  Please check the circuitry."));
         }
         delay(9000);
     }
+    Serial.println();
     delay(1000);
 }
 
@@ -64,21 +67,6 @@ bool SystemClock::setDateTime(int year, int month, int day, int hour, int minute
     timeElements.Hour = hour;
     timeElements.Minute = minute;
     timeElements.Second = second;
-
-    if (_debug)
-    {
-        Serial.print(day);
-        Serial.print("/");
-        Serial.print(month);
-        Serial.print("/");
-        Serial.print(year);
-        Serial.print(" ");
-        Serial.print(hour);
-        Serial.print(":");
-        Serial.print(minute);
-        Serial.print(":");
-        Serial.println(second);
-    }
 
     auto ret = RTC.write(timeElements);
 

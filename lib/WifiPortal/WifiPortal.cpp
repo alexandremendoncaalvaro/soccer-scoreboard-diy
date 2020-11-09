@@ -1,7 +1,15 @@
 #include "WifiPortal.h"
 
+void WifiPortal::set_debug(bool debug)
+{
+    _debug = debug;
+}
+
 bool WifiPortal::beginFileSystem()
 {
+    if (_debug)
+        Serial.println(F("[PORTAL] Starting FileSystem..."));
+
     auto isFileSystemOk = LittleFS.begin();
 
     if (!isFileSystemOk)
@@ -30,41 +38,72 @@ bool WifiPortal::beginFileSystem()
     return true;
 }
 
-// void WifiPortal::handleGenericArgs()
-// {
-//     if (_debug)
-//     {
-//         Serial.println(server->args());
+DynamicJsonDocument WifiPortal::jsonToDocument(String json, int numberOfElements, int messageLength)
+{
+    const size_t capacity = JSON_OBJECT_SIZE(numberOfElements) + messageLength;
+    DynamicJsonDocument doc(capacity);
+    auto deserializationError = deserializeJson(doc, json);
 
-//         for (int i = 0; i < server->args(); i++)
-//         {
-//             Serial.print(server->argName(i)); //Get the name of the parameter
-//             Serial.print(" - ");              //Get the name of the parameter
-//             Serial.println(server->arg(i));   //Get the value of the parameter
-//         }
-//     }
-
-//     server->send(200, "text/json", "{\"result\":\"ok\"}");
-// }
+    if (deserializationError)
+    {
+        if (_debug)
+        {
+            Serial.print(F("deserializeJson() failed: "));
+            Serial.println(deserializationError.f_str());
+        }
+    }
+    return doc;
+}
 
 void WifiPortal::handleConfig()
 {
-    // _valueR = server->arg(0).toInt();
-    // _valueG = server->arg(1).toInt();
-    // _valueB = server->arg(2).toInt();
+    auto json = server->arg(1);
+    auto doc = jsonToDocument(json, 3, 10);
+
+    RGB color = {
+        doc["r"],
+        doc["g"],
+        doc["b"]};
+
+    ledDisplay.set_LedColor(color);
 
     if (_debug)
     {
-        // Serial.print(F("R: "));
-        // Serial.println(_valueR);
+        Serial.print(F("[POST CONFIG] JSON: "));
+        Serial.println(json);
 
-        // Serial.print(F("G: "));
-        // Serial.println(_valueG);
+        auto ledColor = ledDisplay.get_LedColor();
+        Serial.print(F("[LED DISPLAY] Values-> R: "));
+        Serial.print(ledColor.r);
+        Serial.print(F(", G: "));
+        Serial.print(ledColor.g);
+        Serial.print(F(", B: "));
+        Serial.println(ledColor.b);
+        Serial.println();
+    }
 
-        // Serial.print(F("B: "));
-        // Serial.println(_valueB);
+    server->send(200, "text/json", "{\"result\":\"ok\"}");
+}
 
-        Serial.println(server->arg(1));
+void WifiPortal::handleClock()
+{
+    // DD/MM/YYYY hh:mm:ss
+    // Message sample: { "datetime": "02/01/1985 00:20:00" }
+    auto json = server->arg(1);
+    auto doc = jsonToDocument(json, 1, 40);
+
+    int year, month, day, hour, minute, second;
+
+    sscanf(doc["datetime"], "%d/%d/%d %d:%d:%d", &day, &month, &year, &hour, &minute, &second);
+
+    if (systemClock.setDateTime(year, month, day, hour, minute, second))
+    {
+        if (_debug)
+        {
+            Serial.print(F("[POST CLOCK] JSON: "));
+            Serial.println(json);
+            systemClock.printTime();
+        }
     }
 
     server->send(200, "text/json", "{\"result\":\"ok\"}");
@@ -81,6 +120,8 @@ bool WifiPortal::begin()
     if (!beginFileSystem())
         return false;
 
+    if (_debug)
+        Serial.println(F("[PORTAL] Starting Wifi Soft Access Point..."));
     WiFi.setSleepMode(WIFI_NONE_SLEEP);
     WiFi.mode(WIFI_AP);
     IPAddress apIP(192, 168, 1, 1);
@@ -98,9 +139,11 @@ bool WifiPortal::begin()
 
     if (_debug)
     {
-        Serial.println();
+        Serial.println(F("[PORTAL] Wifi Connected!"));
         Serial.print(F("[PORTAL] IP: "));
         Serial.println(WiFi.softAPIP());
+
+        Serial.println(F("[PORTAL] Starting HTTP Web Server..."));
     }
 
     dnsServer.reset(new DNSServer());
@@ -109,7 +152,8 @@ bool WifiPortal::begin()
     dnsServer->start(_dnsPort, "*", apIP);
 
     server->serveStatic("/", LittleFS, "/", "max-age=86400");
-    server->on(String(F("/color")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleConfig, this));
+    server->on(String(F("/setcolor")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleConfig, this));
+    server->on(String(F("/setclock")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleClock, this));
     server->onNotFound(std::bind(&WifiPortal::handleNotFound, this));
 
     server->begin();
@@ -117,6 +161,7 @@ bool WifiPortal::begin()
     if (_debug)
     {
         Serial.println(F("[PORTAL] HTTP server started!"));
+        Serial.println();
     }
     return true;
 

@@ -16,5 +16,3 @@ const includeAllHtml = (personalizedAttributes, callback) => {
     const allHtml = personalizedAttributes.map(includeHtml)
     Promise.all(allHtml).then(callback)
 }
-
-// export { includeAllHtml }

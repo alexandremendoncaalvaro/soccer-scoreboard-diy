@@ -6,5 +6,3 @@ const toggleMobileMenu = () => {
         navMobile.className = navMobile.className.replace(' w3-show', '');
     }
 }
-
-// export { toggleMobileMenu }

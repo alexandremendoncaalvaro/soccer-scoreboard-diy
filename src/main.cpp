@@ -1,16 +1,33 @@
-#include <Arduino.h>
+#include "main.h"
 
-#include "SystemClock.h"
-#include "WifiPortal.h"
+void setLibsDebugOption()
+{
+  systemClock.set_debug(DEBUG);
+  wifiPortal.set_debug(DEBUG);
+}
 
 void setup()
 {
+  setLibsDebugOption();
+
   Serial.begin(115200);
-  wifiPortal.begin();
+  if(DEBUG)
+  {
+    Serial.println(F("[SYSTEM] Serial Ok!"));
+    Serial.println();
+
+    Serial.println(F("[SYSTEM] Checking system Real Time Clock..."));
+    systemClock.printTime();
+  }
+  auto wifiPortalStarted = wifiPortal.begin();
+  if(DEBUG)
+  {
+    if (!wifiPortalStarted)
+      Serial.println(F("[SYSTEM] Wifi Portal Error!"));
+  }
 }
 
 void loop()
 {
-  systemClock.getTime();
   wifiPortal.handleClient();
 }
