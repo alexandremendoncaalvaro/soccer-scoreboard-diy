@@ -1,5 +1,33 @@
+body {
+    background-color: rgb(20, 20, 20);
+    color: rgb(225, 225, 225);
+}
+
+.default-bg {
+    background-color: rgb(20, 20, 20);
+}
+
+.alternative-bg {
+    background-color: rgb(29, 29, 31);
+}
+
+.first-container {
+    margin-top: 46px;
+}
+
 /* --- config.html ---*/
 #set-led-color {
-    width: 150px;
+    max-width: 235px;
+    width: 60%;
     height: 80px;
+}
+
+/* #set-brightness {
+    max-width: 235px;
+    width: 60%;
+} */
+
+/* --- W3 Override ---*/
+.w3-container {
+    min-width: 250px;
 }

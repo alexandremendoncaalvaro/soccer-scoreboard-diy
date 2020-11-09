@@ -10,4 +10,13 @@ RGB LedDisplay::get_LedColor()
     return _ledColor;
 }
 
+void LedDisplay::set_LedBrightness(byte brightness)
+{
+    _ledBrightness = brightness;
+}
+
+byte LedDisplay::get_LedBrightness()
+{
+    return _ledBrightness;
+}
 LedDisplay ledDisplay;

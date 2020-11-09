@@ -2,36 +2,36 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="./css/input-range.css">
+
 </head>
 
 <body>
     <div class="include-common-top"></div>
 
-    <div class="w3-content" style="max-width:2000px;margin-top:86px">
-        <div class="w3-container w3-content w3-center w3-padding-16w3-panel w3-card" style="max-width:800px" id="configurations">
-            <h2 class="w3-wide">CONFIGURAÇÕES</h2>
-            <div class="w3-container w3-round-xxlarge">
-                <p class="w3-opacity"><i>Cor do LED</i></p>
-                <p>
-                    <input type="color" id="set-led-color" name="led-color" value="#ff0000">
-                </p>
-            </div>
-        </div>
+    <div class="w3-container w3-center w3-padding-64 first-container">
+        <p class="w3-opacity"><i>Cor do LED</i></p>
+        <p>
+            <input type="color" id="set-led-color" name="led-color" value="#ff0000" />
+        </p>
     </div>
 
-    <div class="w3-content" style="max-width:2000px;margin-top:46px">
-        <div class="w3-container w3-content w3-center w3-padding-16 w3-panel w3-card" style="max-width:800px" id="configurations">
-            <h2 class="w3-wide">RELÓGIO</h2>
-            <div class="w3-container w3-round-xxlarge">
-                <p class="w3-opacity"><i>Data/ Hora Sistema</i></p>
-                <h2>
-                    <div id="clock"></div>
-                </h2>
-                <a id="set-clock" class="w3-button w3-border" href="">Sincronizar</a>
-            </div>
-        </div>
+    <div class="w3-container w3-center w3-padding-64 alternative-bg">
+        <p class="w3-opacity"><i>Brilho do LED</i></p>
+        <p>
+            <input type="range" id="set-brightness" min="10" max="255" value="255">
+        </p>
+
+    </div>
+
+    <div class="w3-container w3-center w3-padding-64">
+        <p class="w3-opacity"><i>Data/ Hora Sistema</i></p>
+        <h2>
+            <div id="clock"></div>
+        </h2>
+        <a id="set-clock" class="w3-button w3-border" href="">Sincronizar</a>
     </div>
 
     <script src="./js/moment-with-locales.min.js"></script>

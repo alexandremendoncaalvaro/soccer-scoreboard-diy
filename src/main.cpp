@@ -1,10 +1,4 @@
-#include "main.h"
-
-void setLibsDebugOption()
-{
-  systemClock.set_debug(DEBUG);
-  wifiPortal.set_debug(DEBUG);
-}
+#include "header.h"
 
 void setup()
 {
@@ -19,6 +13,7 @@ void setup()
     Serial.println(F("[SYSTEM] Checking system Real Time Clock..."));
     systemClock.printTime();
   }
+  
   auto wifiPortalStarted = wifiPortal.begin();
   if(DEBUG)
   {

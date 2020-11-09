@@ -55,7 +55,7 @@ DynamicJsonDocument WifiPortal::jsonToDocument(String json, int numberOfElements
     return doc;
 }
 
-void WifiPortal::handleConfig()
+void WifiPortal::handleColor()
 {
     auto json = server->arg(1);
     auto doc = jsonToDocument(json, 3, 10);
@@ -79,6 +79,29 @@ void WifiPortal::handleConfig()
         Serial.print(ledColor.g);
         Serial.print(F(", B: "));
         Serial.println(ledColor.b);
+        Serial.println();
+    }
+
+    server->send(200, "text/json", "{\"result\":\"ok\"}");
+}
+
+void WifiPortal::handleBrightness()
+{
+    auto json = server->arg(1);
+    auto doc = jsonToDocument(json, 1, 20);
+
+    byte brightness = doc["brightness"];
+
+    ledDisplay.set_LedBrightness(brightness);
+
+    if (_debug)
+    {
+        Serial.print(F("[POST CONFIG] JSON: "));
+        Serial.println(json);
+
+        auto ledBrightness = ledDisplay.get_LedBrightness();
+        Serial.print(F("[LED DISPLAY] Brightness: "));
+        Serial.print(ledBrightness);
         Serial.println();
     }
 
@@ -152,7 +175,8 @@ bool WifiPortal::begin()
     dnsServer->start(_dnsPort, "*", apIP);
 
     server->serveStatic("/", LittleFS, "/", "max-age=86400");
-    server->on(String(F("/setcolor")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleConfig, this));
+    server->on(String(F("/setcolor")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleColor, this));
+    server->on(String(F("/setbrightness")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleBrightness, this));
     server->on(String(F("/setclock")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleClock, this));
     server->onNotFound(std::bind(&WifiPortal::handleNotFound, this));
 

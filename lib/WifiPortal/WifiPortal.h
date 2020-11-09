@@ -28,7 +28,8 @@ private:
     DynamicJsonDocument jsonToDocument(String json, int numberOfElements, int messageLength);
 
     bool beginFileSystem();
-    void handleConfig();
+    void handleColor();
+    void handleBrightness();
     void handleClock();
     void handleNotFound();
 
