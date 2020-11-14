@@ -60,7 +60,7 @@ void WifiPortal::handleColor()
     auto json = server->arg(1);
     auto doc = jsonToDocument(json, 3, 10);
 
-    RGB color = {
+    ValueRGB color = {
         doc["r"],
         doc["g"],
         doc["b"]};
@@ -138,6 +138,11 @@ void WifiPortal::handleNotFound()
     server->send(200, "text/html", metaRefreshStr);
 }
 
+// void WifiPortal::handleRoot()
+// {
+//     server->send(200, "text/html", "/index.html");
+// }
+
 bool WifiPortal::begin()
 {
     if (!beginFileSystem())
@@ -174,10 +179,12 @@ bool WifiPortal::begin()
 
     dnsServer->start(_dnsPort, "*", apIP);
 
-    server->serveStatic("/", LittleFS, "/", "max-age=86400");
+    // server->on(String(F("/")).c_str(), HTTP_GET, std::bind(&WifiPortal::handleRoot, this));
     server->on(String(F("/setcolor")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleColor, this));
     server->on(String(F("/setbrightness")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleBrightness, this));
     server->on(String(F("/setclock")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleClock, this));
+
+    server->serveStatic("/", LittleFS, "/", "max-age=86400");
     server->onNotFound(std::bind(&WifiPortal::handleNotFound, this));
 
     server->begin();

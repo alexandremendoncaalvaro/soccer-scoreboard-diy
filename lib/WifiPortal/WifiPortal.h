@@ -23,7 +23,7 @@ private:
 
     std::unique_ptr<ESP8266WebServer> server;
     std::unique_ptr<DNSServer> dnsServer;
-    
+
     // https://arduinojson.org/v6/assistant/
     DynamicJsonDocument jsonToDocument(String json, int numberOfElements, int messageLength);
 
@@ -32,6 +32,7 @@ private:
     void handleBrightness();
     void handleClock();
     void handleNotFound();
+    // void handleRoot();
 
 public:
     void set_debug(bool debug);
