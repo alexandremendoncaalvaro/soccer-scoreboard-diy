@@ -2,8 +2,8 @@ input[type=range] {
     margin: auto;
     outline: none;
     padding: 0;
-    width: 50%;
-    height: 6px;
+    width: 80%;
+    height: 16px;
     background-color: #000000;
     background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #303030), color-stop(100%, #333333));
     background-image: -webkit-linear-gradient(#303030, #333333);
@@ -35,8 +35,8 @@ input[type=range]::-moz-focus-outer {
 }
 
 input[type=range]::-webkit-slider-thumb {
-    width: 14px;
-    height: 14px;
+    width: 50px;
+    height: 50px;
     border: 0;
     background: #fff;
     border-radius: 100%;
@@ -45,8 +45,8 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 input[type=range]::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
+    width: 50px;
+    height: 50px;
     border: 0;
     background: #fff;
     border-radius: 100%;

@@ -25,9 +25,10 @@ private:
     std::unique_ptr<DNSServer> dnsServer;
 
     // https://arduinojson.org/v6/assistant/
-    DynamicJsonDocument jsonToDocument(String json, int numberOfElements, int messageLength);
+    DynamicJsonDocument jsonToDocument(String json, size_t capacity);
 
     bool beginFileSystem();
+    void handleGetLedProperties();
     void handleColor();
     void handleBrightness();
     void handleClock();

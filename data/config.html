@@ -13,10 +13,27 @@
     <div class="include-common-top"></div>
 
     <div class="w3-container w3-center w3-padding-64 first-container">
-        <p class="w3-opacity"><i>Cor do LED</i></p>
-        <p>
-            <input type="color" id="set-led-color" name="led-color" value="#ff0000" />
-        </p>
+        <p class="w3-opacity"><i>Cor dos Leds</i></p>
+        <div class="w3-cell-row">
+            <div class="w3-container w3-cell w3-mobile">
+                <p>Time A</p>
+                <p>
+                    <input class="set-led-color" type="color" id="set-led-color-team1" name="led-color-team1" value="#ff0000" />
+                </p>
+            </div>
+            <div class="w3-container w3-cell w3-mobile">
+                <p>Time B</p>
+                <p>
+                    <input class="set-led-color" type="color" id="set-led-color-team2" name="led-color-team2" value="#00ff00" />
+                </p>
+            </div>
+            <div class="w3-container w3-cell w3-mobile">
+                <p>Timer</p>
+                <p>
+                    <input class="set-led-color" type="color" id="set-led-color-timer" name="led-color" value="#0000ff" />
+                </p>
+            </div>
+        </div>
     </div>
 
     <div class="w3-container w3-center w3-padding-64 alternative-bg">
@@ -24,23 +41,17 @@
         <p>
             <input type="range" id="set-brightness" min="10" max="255" value="255">
         </p>
-
     </div>
 
     <div class="w3-container w3-center w3-padding-64">
-        <p class="w3-opacity"><i>Data/ Hora Sistema</i></p>
-        <h2>
-            <div id="clock"></div>
-        </h2>
-        <a id="set-clock" class="w3-button w3-border" href="">Sincronizar</a>
+        <p class="w3-opacity"><i>Json</i></p>
+        <p id="teste"></p>
     </div>
 
-    <script src="./js/moment-with-locales.min.js"></script>
     <script src="./js/menu.js"></script>
     <script src="./js/dynamic-load.js"></script>
     <script src="./js/rest.js"></script>
     <script src="./js/color.js"></script>
-    <script src="./js/clock.js"></script>
     <script src="./js/index.js"></script>
 </body>
 

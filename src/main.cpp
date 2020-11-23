@@ -5,7 +5,7 @@ void setup()
   setLibsDebugOption();
 
   Serial.begin(115200);
-  if(DEBUG)
+  if (DEBUG)
   {
     Serial.println(F("[SYSTEM] Serial Ok!"));
     Serial.println();
@@ -13,9 +13,9 @@ void setup()
     Serial.println(F("[SYSTEM] Checking system Real Time Clock..."));
     systemClock.printTime();
   }
-  
+
   auto wifiPortalStarted = wifiPortal.begin();
-  if(DEBUG)
+  if (DEBUG)
   {
     if (!wifiPortalStarted)
       Serial.println(F("[SYSTEM] Wifi Portal Error!"));
@@ -41,7 +41,6 @@ void loop()
 
 // #define UPDATES_PER_SECOND 100
 
-
 // CRGBPalette16 currentPalette;
 // TBlendType    currentBlending;
 
@@ -51,13 +50,12 @@ void loop()
 // void FillLEDsFromPaletteColors( uint8_t colorIndex)
 // {
 //     uint8_t brightness = 255;
-    
+
 //     for( int i = 0; i < NUM_LEDS; i++) {
 //         leds[i] = ColorFromPalette( currentPalette, colorIndex, brightness, currentBlending);
 //         colorIndex += 3;
 //     }
 // }
-
 
 // // This function fills the palette with totally random colors.
 // void SetupTotallyRandomPalette()
@@ -80,7 +78,7 @@ void loop()
 //     currentPalette[4] = CRGB::White;
 //     currentPalette[8] = CRGB::White;
 //     currentPalette[12] = CRGB::White;
-    
+
 // }
 
 // // This function sets up a palette of purple and green stripes.
@@ -89,14 +87,13 @@ void loop()
 //     CRGB purple = CHSV( HUE_PURPLE, 255, 255);
 //     CRGB green  = CHSV( HUE_GREEN, 255, 255);
 //     CRGB black  = CRGB::Black;
-    
+
 //     currentPalette = CRGBPalette16(
 //                                    green,  green,  black,  black,
 //                                    purple, purple, black,  black,
 //                                    green,  green,  black,  black,
 //                                    purple, purple, black,  black );
 // }
-
 
 // // This example shows how to set up a static color palette
 // // which is stored in PROGMEM (flash), which is almost always more
@@ -108,12 +105,12 @@ void loop()
 //     CRGB::Gray, // 'white' is too bright compared to red and blue
 //     CRGB::Blue,
 //     CRGB::Black,
-    
+
 //     CRGB::Red,
 //     CRGB::Gray,
 //     CRGB::Blue,
 //     CRGB::Black,
-    
+
 //     CRGB::Red,
 //     CRGB::Red,
 //     CRGB::Gray,
@@ -128,7 +125,7 @@ void loop()
 // {
 //     uint8_t secondHand = (millis() / 1000) % 60;
 //     static uint8_t lastSecond = 99;
-    
+
 //     if( lastSecond != secondHand) {
 //         lastSecond = secondHand;
 //         if( secondHand ==  0)  { currentPalette = RainbowColors_p;         currentBlending = LINEARBLEND; }
@@ -149,7 +146,7 @@ void loop()
 //     delay( 3000 ); // power-up safety delay
 //     FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
 //     FastLED.setBrightness(  BRIGHTNESS );
-    
+
 //     currentPalette = RainbowColors_p;
 //     currentBlending = LINEARBLEND;
 // }
@@ -157,12 +154,12 @@ void loop()
 // void loop()
 // {
 //     ChangePalettePeriodically();
-    
+
 //     static uint8_t startIndex = 0;
 //     startIndex = startIndex + 1; /* motion speed */
-    
+
 //     FillLEDsFromPaletteColors( startIndex);
-    
+
 //     FastLED.show();
 //     FastLED.delay(1000 / UPDATES_PER_SECOND);
 // }

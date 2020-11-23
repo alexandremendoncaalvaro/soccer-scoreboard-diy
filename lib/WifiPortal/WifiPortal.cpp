@@ -38,9 +38,8 @@ bool WifiPortal::beginFileSystem()
     return true;
 }
 
-DynamicJsonDocument WifiPortal::jsonToDocument(String json, int numberOfElements, int messageLength)
+DynamicJsonDocument WifiPortal::jsonToDocument(String json, size_t capacity)
 {
-    const size_t capacity = JSON_OBJECT_SIZE(numberOfElements) + messageLength;
     DynamicJsonDocument doc(capacity);
     auto deserializationError = deserializeJson(doc, json);
 
@@ -58,22 +57,51 @@ DynamicJsonDocument WifiPortal::jsonToDocument(String json, int numberOfElements
 void WifiPortal::handleColor()
 {
     auto json = server->arg(1);
-    auto doc = jsonToDocument(json, 3, 10);
 
-    ValueRGB color = {
-        doc["r"],
-        doc["g"],
-        doc["b"]};
+    // https://arduinojson.org/v6/assistant/
+    size_t capacity = 4 * JSON_OBJECT_SIZE(3) + 20;
+    auto doc = jsonToDocument(json, capacity);
 
-    ledDisplay.set_LedColor(color);
+    ValueRGB colorT1 = {
+        doc["t1"]["r"],
+        doc["t1"]["g"],
+        doc["t1"]["b"]};
+
+    ValueRGB colorT2 = {
+        doc["t2"]["r"],
+        doc["t2"]["g"],
+        doc["t2"]["b"]};
+
+    ValueRGB colorTm = {
+        doc["tm"]["r"],
+        doc["tm"]["g"],
+        doc["tm"]["b"]};
+
+    ledDisplay.set_LedColor(colorT1, 1);
+    ledDisplay.set_LedColor(colorT2, 2);
+    ledDisplay.set_LedColor(colorTm, 3);
 
     if (_debug)
     {
         Serial.print(F("[POST CONFIG] JSON: "));
         Serial.println(json);
 
-        auto ledColor = ledDisplay.get_LedColor();
-        Serial.print(F("[LED DISPLAY] Values-> R: "));
+        auto ledColor = ledDisplay.get_LedColor(1);
+        Serial.print(F("[LED DISPLAY] T1 -> R: "));
+        Serial.print(ledColor.r);
+        Serial.print(F(", G: "));
+        Serial.print(ledColor.g);
+        Serial.print(F(", B: "));
+        Serial.println(ledColor.b);
+        ledColor = ledDisplay.get_LedColor(2);
+        Serial.print(F("[LED DISPLAY] T2 -> R: "));
+        Serial.print(ledColor.r);
+        Serial.print(F(", G: "));
+        Serial.print(ledColor.g);
+        Serial.print(F(", B: "));
+        Serial.println(ledColor.b);
+        ledColor = ledDisplay.get_LedColor(3);
+        Serial.print(F("[LED DISPLAY] TM -> R: "));
         Serial.print(ledColor.r);
         Serial.print(F(", G: "));
         Serial.print(ledColor.g);
@@ -88,7 +116,10 @@ void WifiPortal::handleColor()
 void WifiPortal::handleBrightness()
 {
     auto json = server->arg(1);
-    auto doc = jsonToDocument(json, 1, 20);
+
+    // https://arduinojson.org/v6/assistant/
+    size_t capacity = JSON_OBJECT_SIZE(1) + 20;
+    auto doc = jsonToDocument(json, capacity);
 
     byte brightness = doc["brightness"];
 
@@ -113,7 +144,10 @@ void WifiPortal::handleClock()
     // DD/MM/YYYY hh:mm:ss
     // Message sample: { "datetime": "02/01/1985 00:20:00" }
     auto json = server->arg(1);
-    auto doc = jsonToDocument(json, 1, 40);
+
+    // https://arduinojson.org/v6/assistant/
+    size_t capacity = JSON_OBJECT_SIZE(1) + 40;
+    auto doc = jsonToDocument(json, capacity);
 
     int year, month, day, hour, minute, second;
 
@@ -138,10 +172,17 @@ void WifiPortal::handleNotFound()
     server->send(200, "text/html", metaRefreshStr);
 }
 
-// void WifiPortal::handleRoot()
-// {
-//     server->send(200, "text/html", "/index.html");
-// }
+void WifiPortal::handleGetLedProperties()
+{
+    StaticJsonDocument<200> doc;
+    doc["tm"]["g"] = ledDisplay.get_LedColor(3).g;
+    doc["tm"]["r"] = ledDisplay.get_LedColor(3).r;
+    doc["tm"]["b"] = ledDisplay.get_LedColor(3).b;
+    doc["bright"] = ledDisplay.get_LedBrightness();
+    String payload = "";
+    serializeJson(doc, payload);
+    server->send(200, "text/json", payload);
+}
 
 bool WifiPortal::begin()
 {
@@ -180,6 +221,7 @@ bool WifiPortal::begin()
     dnsServer->start(_dnsPort, "*", apIP);
 
     // server->on(String(F("/")).c_str(), HTTP_GET, std::bind(&WifiPortal::handleRoot, this));
+    server->on(String(F("/getled")).c_str(), HTTP_GET, std::bind(&WifiPortal::handleGetLedProperties, this));
     server->on(String(F("/setcolor")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleColor, this));
     server->on(String(F("/setbrightness")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleBrightness, this));
     server->on(String(F("/setclock")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleClock, this));
