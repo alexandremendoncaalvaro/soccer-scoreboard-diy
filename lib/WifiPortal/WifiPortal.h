@@ -29,7 +29,7 @@ private:
 
     bool beginFileSystem();
     void handleGetLedProperties();
-    void handleColor();
+    void handleColors();
     void handleBrightness();
     void handleClock();
     void handleNotFound();

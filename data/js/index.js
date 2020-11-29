@@ -1,18 +1,22 @@
 const dynamicLoad = () => {
-    const afterLoad = () => {
-        document.querySelector('#menu-button').addEventListener('click', toggleMobileMenu)
-    }
+  const afterLoad = () => {
+    document
+      .querySelector("#menu-button")
+      .addEventListener("click", toggleMobileMenu)
+  }
 
-    const htmlList = Array.from(document.querySelectorAll(`[class*='include-']`)).map(e => e.className.replace('include-', ''))
-    includeAllHtml(htmlList, afterLoad)
+  const htmlList = Array.from(
+    document.querySelectorAll(`[class*='include-']`)
+  ).map((e) => e.className.replace("include-", ""))
+  includeAllHtml(htmlList, afterLoad)
 }
 
 const documentReady = () => {
-    dynamicLoad()
+  dynamicLoad()
 }
 
-if (document.readyState !== 'loading') {
-    documentReady()
+if (document.readyState !== "loading") {
+  documentReady()
 } else {
-    document.addEventListener('DOMContentLoaded', documentReady)
+  document.addEventListener("DOMContentLoaded", documentReady)
 }

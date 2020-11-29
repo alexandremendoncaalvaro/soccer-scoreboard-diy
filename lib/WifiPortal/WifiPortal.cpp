@@ -54,7 +54,7 @@ DynamicJsonDocument WifiPortal::jsonToDocument(String json, size_t capacity)
     return doc;
 }
 
-void WifiPortal::handleColor()
+void WifiPortal::handleColors()
 {
     auto json = server->arg(1);
 
@@ -174,9 +174,15 @@ void WifiPortal::handleNotFound()
 
 void WifiPortal::handleGetLedProperties()
 {
-    StaticJsonDocument<200> doc;
-    doc["tm"]["g"] = ledDisplay.get_LedColor(3).g;
+    StaticJsonDocument<600> doc;
+    doc["t1"]["r"] = ledDisplay.get_LedColor(1).r;
+    doc["t1"]["g"] = ledDisplay.get_LedColor(1).g;
+    doc["t1"]["b"] = ledDisplay.get_LedColor(1).b;
+    doc["t2"]["r"] = ledDisplay.get_LedColor(2).r;
+    doc["t2"]["g"] = ledDisplay.get_LedColor(2).g;
+    doc["t2"]["b"] = ledDisplay.get_LedColor(2).b;
     doc["tm"]["r"] = ledDisplay.get_LedColor(3).r;
+    doc["tm"]["g"] = ledDisplay.get_LedColor(3).g;
     doc["tm"]["b"] = ledDisplay.get_LedColor(3).b;
     doc["bright"] = ledDisplay.get_LedBrightness();
     String payload = "";
@@ -221,8 +227,8 @@ bool WifiPortal::begin()
     dnsServer->start(_dnsPort, "*", apIP);
 
     // server->on(String(F("/")).c_str(), HTTP_GET, std::bind(&WifiPortal::handleRoot, this));
-    server->on(String(F("/getled")).c_str(), HTTP_GET, std::bind(&WifiPortal::handleGetLedProperties, this));
-    server->on(String(F("/setcolor")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleColor, this));
+    server->on(String(F("/getledprops")).c_str(), HTTP_GET, std::bind(&WifiPortal::handleGetLedProperties, this));
+    server->on(String(F("/setcolors")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleColors, this));
     server->on(String(F("/setbrightness")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleBrightness, this));
     server->on(String(F("/setclock")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleClock, this));
 
@@ -237,68 +243,6 @@ bool WifiPortal::begin()
         Serial.println();
     }
     return true;
-
-    // server.on("/setdate", HTTP_POST, []() {
-    //     // Sample input: date = "Dec 06 2009", time = "12:34:56"
-    //     // Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
-    //     String dateArg = wifiPortal.server.arg("date");
-    //     String timeArg = wifiPortal.server.arg("time");
-    //     char date[11];
-    //     char time[9];
-
-    //     int year, month, day, hour, minute, second;
-
-    //     dateArg.toCharArray(date, 11);
-    //     timeArg.toCharArray(time, 9);
-
-    //     if (wifiPortal._debug)
-    //     {
-    //         Serial.print("Date: ");
-    //         Serial.println(date);
-    //         Serial.print("Time: ");
-    //         Serial.println(time);
-    //     }
-
-    //     sscanf(date, "%d/%d/%d", &day, &month, &year);
-    //     sscanf(time, "%d:%d:%d", &hour, &minute, &second);
-
-    //     if (systemClock.setDateTime(year, month, day, hour, minute, second))
-    //     {
-    //         if (wifiPortal._debug)
-    //         {
-    //             systemClock.printTime();
-    //         }
-    //     }
-
-    //     wifiPortal.server.send(200, "text/json", "{\"result\":\"ok\"}");
-    // });
-
-    // server.on("/brightness", HTTP_POST, []() {
-    //     wifiPortal.server.send(200, "text/json", "{\"result\":\"ok\"}");
-    // });
-
-    // server.on("/countdown", HTTP_POST, []() {
-    //     wifiPortal.server.send(200, "text/json", "{\"result\":\"ok\"}");
-    // });
-
-    // server.on("/temperature", HTTP_POST, []() {
-    //     wifiPortal.server.send(200, "text/json", "{\"result\":\"ok\"}");
-    // });
-
-    // server.on("/scoreboard", HTTP_POST, []() {
-    //     wifiPortal.server.send(200, "text/json", "{\"result\":\"ok\"}");
-    // });
-
-    // server.on("/hourformat", HTTP_POST, []() {
-    //     wifiPortal.server.send(200, "text/json", "{\"result\":\"ok\"}");
-    // });
-
-    // server.on("/clock", HTTP_POST, []() {
-    //     wifiPortal.server.send(200, "text/json", "{\"result\":\"ok\"}");
-    // });
-
-    // Before uploading the files with the "ESP8266 Sketch Data Upload" tool, zip the files with the command "gzip -r ./data/" (on Windows I do this with a Git Bash)
-    // *.gz files are automatically unpacked and served from your ESP (so you don't need to create a handler for each file).
 }
 
 void WifiPortal::handleClient()
