@@ -1,12 +1,49 @@
 #include "LedDisplay.h"
 
-void LedDisplay::begin()
+void LedDisplay::set_debug(bool debug)
+{
+    _debug = debug;
+}
+
+bool LedDisplay::begin()
+{
+    return begin(D7);
+}
+
+bool LedDisplay::begin(uint8_t ledPin)
 {
     delay(3000); // power-up safety delay
-    FastLED.addLeds<WS2812B, D7, GRB>(leds, _totalLeds).setCorrection(TypicalLEDStrip);
-    FastLED.setBrightness(_ledBrightness);
-    setAllColors(CRGB::Black);
-    updateLeds();
+    // FastLED.addLeds pin needs to be declare as a constant
+    switch (ledPin)
+    {
+    case D3:
+        FastLED.addLeds<WS2812B, D3, GRB>(leds, _totalLeds).setCorrection(TypicalLEDStrip);
+        break;
+    case D4:
+        FastLED.addLeds<WS2812B, D4, GRB>(leds, _totalLeds).setCorrection(TypicalLEDStrip);
+        break;
+    case D5:
+        FastLED.addLeds<WS2812B, D5, GRB>(leds, _totalLeds).setCorrection(TypicalLEDStrip);
+        break;
+    case D6:
+        FastLED.addLeds<WS2812B, D6, GRB>(leds, _totalLeds).setCorrection(TypicalLEDStrip);
+        break;
+    case D7:
+        FastLED.addLeds<WS2812B, D7, GRB>(leds, _totalLeds).setCorrection(TypicalLEDStrip);
+        break;
+    default:
+        if (_debug)
+        {
+            Serial.println(F("[LED] Invalid Led Pin!"));
+            Serial.println();
+        }
+        return false;
+        break;
+    }
+    // FastLED.setBrightness(_ledBrightness);
+    // setAllColors(CRGB::Black);
+    // updateLeds();
+    return true;
 }
 
 void LedDisplay::setAllColors(CRGB ledColor)

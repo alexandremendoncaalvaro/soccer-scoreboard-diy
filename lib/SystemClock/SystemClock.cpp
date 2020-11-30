@@ -43,12 +43,12 @@ void SystemClock::printTime()
     {
         if (RTC.chipPresent())
         {
-            Serial.println(F("The DS1307 is stopped.  Please run the SetTime"));
+            Serial.println(F("The DS1307 is stopped. Please run the SetTime"));
             Serial.println(F("example to initialize the time and begin running."));
                 }
         else
         {
-            Serial.println(F("DS1307 read error!  Please check the circuitry."));
+            Serial.println(F("DS1307 read error! Please check the circuitry."));
         }
         delay(9000);
     }

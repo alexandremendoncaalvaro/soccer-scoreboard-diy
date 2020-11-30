@@ -5,62 +5,13 @@ void WifiPortal::set_debug(bool debug)
     _debug = debug;
 }
 
-bool WifiPortal::beginFileSystem()
-{
-    if (_debug)
-        Serial.println(F("[PORTAL] Starting FileSystem..."));
-
-    auto isFileSystemOk = LittleFS.begin();
-
-    if (!isFileSystemOk)
-    {
-        if (_debug)
-            Serial.println(F("[PORTAL] FileSystem error!"));
-        return false;
-    }
-
-    if (_debug)
-        Serial.println(F("[PORTAL] LittleFS contents:"));
-
-    Dir dir = LittleFS.openDir("/");
-    while (dir.next())
-    {
-        String fileName = dir.fileName();
-        size_t fileSize = dir.fileSize();
-
-        if (_debug)
-            Serial.printf("[PORTAL] FS File: %s, size: %s\n", fileName.c_str(), String(fileSize).c_str());
-    }
-
-    if (_debug)
-        Serial.println();
-
-    return true;
-}
-
-DynamicJsonDocument WifiPortal::jsonToDocument(String json, size_t capacity)
-{
-    DynamicJsonDocument doc(capacity);
-    auto deserializationError = deserializeJson(doc, json);
-
-    if (deserializationError)
-    {
-        if (_debug)
-        {
-            Serial.print(F("deserializeJson() failed: "));
-            Serial.println(deserializationError.f_str());
-        }
-    }
-    return doc;
-}
-
 void WifiPortal::handleColors()
 {
     auto json = server->arg(1);
 
     // https://arduinojson.org/v6/assistant/
     size_t capacity = 4 * JSON_OBJECT_SIZE(3) + 20;
-    auto doc = jsonToDocument(json, capacity);
+    auto doc = fileSystem.jsonToDocument(json, capacity);
 
     ValueRGB colorT1 = {
         doc["t1"]["r"],
@@ -119,7 +70,7 @@ void WifiPortal::handleBrightness()
 
     // https://arduinojson.org/v6/assistant/
     size_t capacity = JSON_OBJECT_SIZE(1) + 20;
-    auto doc = jsonToDocument(json, capacity);
+    auto doc = fileSystem.jsonToDocument(json, capacity);
 
     byte brightness = doc["brightness"];
 
@@ -147,7 +98,7 @@ void WifiPortal::handleClock()
 
     // https://arduinojson.org/v6/assistant/
     size_t capacity = JSON_OBJECT_SIZE(1) + 40;
-    auto doc = jsonToDocument(json, capacity);
+    auto doc = fileSystem.jsonToDocument(json, capacity);
 
     int year, month, day, hour, minute, second;
 
@@ -172,7 +123,7 @@ void WifiPortal::handleNotFound()
     server->send(200, "text/html", metaRefreshStr);
 }
 
-void WifiPortal::handleGetLedProperties()
+String WifiPortal::loadSettings()
 {
     StaticJsonDocument<600> doc;
     doc["t1"]["r"] = ledDisplay.get_LedColor(1).r;
@@ -185,16 +136,26 @@ void WifiPortal::handleGetLedProperties()
     doc["tm"]["g"] = ledDisplay.get_LedColor(3).g;
     doc["tm"]["b"] = ledDisplay.get_LedColor(3).b;
     doc["bright"] = ledDisplay.get_LedBrightness();
-    String payload = "";
-    serializeJson(doc, payload);
-    server->send(200, "text/json", payload);
+    String settings = "";
+    serializeJson(doc, settings);
+    return settings;
+}
+
+void WifiPortal::handleSaveSettings()
+{
+    String settings = loadSettings();
+    fileSystem.saveSettings(settings);
+    server->send(200, "text/json", "{\"result\":\"ok\"}");
+}
+
+void WifiPortal::handleGetLedProperties()
+{
+    String settings = loadSettings();
+    server->send(200, "text/json", settings);
 }
 
 bool WifiPortal::begin()
 {
-    if (!beginFileSystem())
-        return false;
-
     if (_debug)
         Serial.println(F("[PORTAL] Starting Wifi Soft Access Point..."));
     WiFi.setSleepMode(WIFI_NONE_SLEEP);
@@ -231,8 +192,10 @@ bool WifiPortal::begin()
     server->on(String(F("/setcolors")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleColors, this));
     server->on(String(F("/setbrightness")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleBrightness, this));
     server->on(String(F("/setclock")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleClock, this));
+    server->on(String(F("/save")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleSaveSettings, this));
 
-    server->serveStatic("/", LittleFS, "/", "max-age=86400");
+    server->serveStatic("/", LittleFS, "/www/", "max-age=86400");
+    server->serveStatic("/index.html", LittleFS, "/www/index.html", "max-age=86400");
     server->onNotFound(std::bind(&WifiPortal::handleNotFound, this));
 
     server->begin();

@@ -35,9 +35,9 @@ const setBrightness = (value) => {
 
 const getLedProperties = () => {
   get("/getledprops").then((result) => {
-    document.querySelector("#teste").innerHTML = result
+    // document.querySelector("#teste").innerHTML = result
     const jsonResult = JSON.parse(result)
-    document.querySelector("#set-brightness").value = jsonResult.bright
+    
     document.querySelector("#set-led-color-team1").value = rgbToHex(
       jsonResult.t1.r,
       jsonResult.t1.g,
@@ -53,6 +53,10 @@ const getLedProperties = () => {
       jsonResult.tm.g,
       jsonResult.tm.b
     )
+
+    const elementInputRange = document.querySelector("#set-brightness")
+    elementInputRange.value = jsonResult.bright
+    resizeInputRange(elementInputRange)
   })
 }
 
@@ -71,10 +75,14 @@ const beginColor = () => {
   })
 
   const elementInputRange = document.querySelector("#set-brightness")
-  resizeInputRange(elementInputRange)
   elementInputRange.addEventListener("input", (e) => {
     resizeInputRange(e.target)
     setBrightness(e.target.value)
+  })
+
+  document.querySelector("#save").addEventListener("click", (e) => {
+    e.preventDefault()
+    post("/save", "")
   })
 
   getLedProperties()

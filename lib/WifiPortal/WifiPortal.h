@@ -7,8 +7,7 @@
 #include <ESP8266HTTPUpdateServer.h>
 #include <DNSServer.h>
 #include <ESP8266mDNS.h>
-#include <LittleFS.h>
-#include <ArduinoJson.h>
+#include "FileSystem.h"
 #include "SystemClock.h"
 #include "LedDisplay.h"
 
@@ -24,10 +23,9 @@ private:
     std::unique_ptr<ESP8266WebServer> server;
     std::unique_ptr<DNSServer> dnsServer;
 
-    // https://arduinojson.org/v6/assistant/
-    DynamicJsonDocument jsonToDocument(String json, size_t capacity);
+    String loadSettings();
 
-    bool beginFileSystem();
+    void handleSaveSettings();
     void handleGetLedProperties();
     void handleColors();
     void handleBrightness();

@@ -33,6 +33,7 @@ const long DIGITS[] = {
 class LedDisplay
 {
 private:
+    bool _debug = false;
     CRGB _ledColorT1 = CRGB(255, 255, 255);
     CRGB _ledColorT2 = CRGB(255, 255, 255);
     CRGB _ledColorTm = CRGB(255, 255, 255);
@@ -47,7 +48,11 @@ private:
     void setSeparatedColors();
 
 public:
-    void begin();
+    void set_debug(bool debug);
+
+    bool begin();
+    bool begin(uint8_t ledPin);
+
     void set_LedColor(ValueRGB color, int id);
     ValueRGB get_LedColor(int id);
 
