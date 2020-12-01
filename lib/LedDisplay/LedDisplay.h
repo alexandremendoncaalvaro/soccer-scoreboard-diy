@@ -34,6 +34,7 @@ class LedDisplay
 {
 private:
     bool _debug = false;
+
     CRGB _ledColorT1 = CRGB(255, 255, 255);
     CRGB _ledColorT2 = CRGB(255, 255, 255);
     CRGB _ledColorTm = CRGB(255, 255, 255);
@@ -60,6 +61,8 @@ public:
     byte get_LedBrightness();
 
     void updateLeds();
+
+    void displayNumber(byte number, byte segment, CRGB color);
 };
 
 extern LedDisplay ledDisplay;

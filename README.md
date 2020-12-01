@@ -44,8 +44,8 @@ A very basic DIY soccer scoreboard project.
 | :---: | :---: |
 
 # Inspiration and attributions
-This project was strongly inspired by the project [7-Segment Digital Clock](https://github.com/leonvandenbeukel/7-Segment-Digital-Clock-V2).  
-Licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
-We've started building our project from scratch and used pieces of the 7-Segment Digital Clock code to quickly test and adapt it to our scenario. During this process, a new code was created and a good part of the 7-Segment Digital Clock original code was refactored. But most of the concepts and functionalities remain.  
+We made this project from the scratch, using the project [7-Segment Digital Clock](https://github.com/leonvandenbeukel/7-Segment-Digital-Clock-V2) as a reference and inspiration.  
+This project and [7-Segment Digital Clock](https://github.com/leonvandenbeukel/7-Segment-Digital-Clock-V2) project are licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+
 Special thanks to [Leon van den Beukel](https://github.com/leonvandenbeukel) for the amazing work.

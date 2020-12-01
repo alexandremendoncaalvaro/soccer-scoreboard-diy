@@ -56,18 +56,19 @@ void LedDisplay::setAllColors(CRGB ledColor)
 
 void LedDisplay::setSeparatedColors()
 {
-    for (int i = 0; i < 10; i++)
-    {
-        leds[i] = _ledColorT1;
-    }
-    for (int i = 10; i < 20; i++)
-    {
-        leds[i] = _ledColorT2;
-    }
-    for (int i = 20; i < _totalLeds; i++)
-    {
-        leds[i] = _ledColorTm;
-    }
+    displayNumber(5, 0, _ledColorT1);
+    // for (int i = 0; i < 10; i++)
+    // {
+    //     leds[i] = _ledColorT1;
+    // }
+    // for (int i = 10; i < 20; i++)
+    // {
+    //     leds[i] = _ledColorT2;
+    // }
+    // for (int i = 20; i < _totalLeds; i++)
+    // {
+    //     leds[i] = _ledColorTm;
+    // }
 }
 
 void LedDisplay::set_LedColor(ValueRGB color, int id)
@@ -134,6 +135,41 @@ void LedDisplay::updateLeds()
         FastLED.show();
     }
     yield();
+}
+
+void LedDisplay::displayNumber(byte number, byte segment, CRGB color)
+{
+    /*
+      __ __ __        __ __ __          __ __ __        __ __ __  
+    __        __    __        __      __        __    __        __
+    __        __    __        __      __        __    __        __
+    __        __    __        __      __        __    __        __
+      __ __ __        __ __ __          __ __ __        __ __ __  
+    __       149    __       128      __       107    __        86
+    __        __    __        __      __        __    __        __
+    __        __    __        __      __        __    __        __
+      __ __ __       __ __ __           __ __ __        __ __ __   
+
+      __ __ __        __ __ __          __ __ __        12 13 14  
+    __        __    __        __      __        __    11        15
+    __        __    __        __      __        __    10        16
+    __        __    __        __  42  __        __    _9        17
+      __ __ __        __ __ __          __ __ __        20 19 18  
+    __        65    __        44  43  __        21    _8        _0
+    __        __    __        __      __        __    _7        _1
+    __        __    __        __      __        __    _6        _2
+      __ __ __       __ __ __           __ __ __        _5 _4 _3   
+   */
+    // top segment from left to right:    7, 6, 5, 4
+    // bottom segment from left to right: 3, 2, 1, 0
+
+    byte startindex = segment < 2 ? (segment * 21) : (segment * 21) + 2;
+
+    for (byte i = 0; i < 21; i++)
+    {
+        yield();
+        leds[i + startindex] = ((DIGITS[number] & 1 << i) == 1 << i) ? color : CRGB::Black;
+    }
 }
 
 LedDisplay ledDisplay;
