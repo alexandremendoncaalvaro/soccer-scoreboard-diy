@@ -37,7 +37,7 @@ const getLedProperties = () => {
   get("/getledprops").then((result) => {
     // document.querySelector("#teste").innerHTML = result
     const jsonResult = JSON.parse(result)
-    
+
     document.querySelector("#set-led-color-team1").value = rgbToHex(
       jsonResult.t1.r,
       jsonResult.t1.g,
@@ -82,7 +82,16 @@ const beginColor = () => {
 
   document.querySelector("#save").addEventListener("click", (e) => {
     e.preventDefault()
-    post("/save", "")
+    get("/save")
+      .then(() => {
+        document.querySelector("#save-confirmation").innerHTML =
+          "Configurações salvas!"
+      })
+      .then(() => {
+        setTimeout(() => {
+          document.querySelector("#save-confirmation").innerHTML = ""
+        }, 3000)
+      })
   })
 
   getLedProperties()

@@ -8,6 +8,14 @@ const setClock = () => {
     datetime: moment().format("DD/MM/YYYY HH:mm:ss"),
   }
   post("/setclock", clock)
+    .then(() => {
+      document.querySelector("#clock-confirmation").innerHTML = "Sincronizado!"
+    })
+    .then(() => {
+      setTimeout(() => {
+        document.querySelector("#clock-confirmation").innerHTML = ""
+      }, 3000)
+    })
 }
 
 const beginClock = () => {

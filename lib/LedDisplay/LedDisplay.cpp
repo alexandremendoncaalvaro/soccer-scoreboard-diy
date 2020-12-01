@@ -7,7 +7,7 @@ void LedDisplay::set_debug(bool debug)
 
 bool LedDisplay::begin()
 {
-    return begin(D7);
+    return begin(D3);
 }
 
 bool LedDisplay::begin(uint8_t ledPin)

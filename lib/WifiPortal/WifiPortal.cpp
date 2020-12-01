@@ -145,6 +145,10 @@ void WifiPortal::handleSaveSettings()
 {
     String settings = loadSettings();
     fileSystem.saveSettings(settings);
+    if (_debug)
+    {
+        Serial.println(F("[SETTINGS] Configuration Saved!"));
+    }
     server->send(200, "text/json", "{\"result\":\"ok\"}");
 }
 
@@ -192,7 +196,7 @@ bool WifiPortal::begin()
     server->on(String(F("/setcolors")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleColors, this));
     server->on(String(F("/setbrightness")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleBrightness, this));
     server->on(String(F("/setclock")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleClock, this));
-    server->on(String(F("/save")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleSaveSettings, this));
+    server->on(String(F("/save")).c_str(), HTTP_GET, std::bind(&WifiPortal::handleSaveSettings, this));
 
     server->serveStatic("/", LittleFS, "/www/", "max-age=86400");
     server->serveStatic("/index.html", LittleFS, "/www/index.html", "max-age=86400");
