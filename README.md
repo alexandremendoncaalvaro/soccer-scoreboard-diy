@@ -1,3 +1,5 @@
+# UNDER CONSTRUCTION
+
 # Soccer Scoreboard (DIY)
 A DIY soccer scoreboard project.
 
