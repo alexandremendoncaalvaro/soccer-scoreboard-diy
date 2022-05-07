@@ -57,7 +57,15 @@ DynamicJsonDocument FileSystem::jsonToDocument(String json, size_t capacity)
 bool FileSystem::saveSettings(String payload)
 {
     File configFile = LittleFS.open("/settings.json", "w");
-    configFile.print(payload);
+    size_t size = configFile.print(payload);
+    if (size == 0)
+    {
+        if (_debug)
+            Serial.println(F("[FILESYSTEM] Error saving settings!"));
+        return false;
+    }
+    configFile.close();
+    return true;
 }
 
 String FileSystem::loadSettings()
@@ -87,6 +95,7 @@ String FileSystem::loadSettings()
         Serial.println(result);
     }
 
+    configFile.close();
     return result;
 }
 

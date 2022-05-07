@@ -1,4 +1,4 @@
-const includeHtml = (personalizedAttribute) => {
+const dynamicLoadHtml = (personalizedAttribute) => {
   return new Promise((resolve, reject) => {
     const path = `./${personalizedAttribute}.html`
     const ajax = new XMLHttpRequest()
@@ -6,7 +6,7 @@ const includeHtml = (personalizedAttribute) => {
     ajax.send()
     ajax.onload = (e) => {
       const htmlPlace = document.querySelector(
-        `.include-${personalizedAttribute}`
+        `.dynamic-load-${personalizedAttribute}`
       )
       htmlPlace.outerHTML = ajax.responseText
       resolve()
@@ -14,7 +14,7 @@ const includeHtml = (personalizedAttribute) => {
   })
 }
 
-const includeAllHtml = (personalizedAttributes, callback) => {
-  const allHtml = personalizedAttributes.map(includeHtml)
+const dynamicLoadAllHtml = (personalizedAttributes, callback) => {
+  const allHtml = personalizedAttributes.map(dynamicLoadHtml)
   Promise.all(allHtml).then(callback)
 }

@@ -1,4 +1,4 @@
-const dynamicLoad = () => {
+const dynamicLoadHtmlContent = () => {
   const afterLoad = () => {
     document
       .querySelector("#menu-button")
@@ -6,13 +6,13 @@ const dynamicLoad = () => {
   }
 
   const htmlList = Array.from(
-    document.querySelectorAll(`[class*='include-']`)
-  ).map((e) => e.className.replace("include-", ""))
-  includeAllHtml(htmlList, afterLoad)
+    document.querySelectorAll(`[class*='dynamic-load-']`)
+  ).map((e) => e.className.replace("dynamic-load-", ""))
+  dynamicLoadAllHtml(htmlList, afterLoad)
 }
 
 const documentReady = () => {
-  dynamicLoad()
+  dynamicLoadHtmlContent()
 }
 
 if (document.readyState !== "loading") {
