@@ -1,9 +1,6 @@
 #include "LedDisplay.h"
 
-void LedDisplay::set_debug(bool debug)
-{
-    _debug = debug;
-}
+using namespace Digits;
 
 bool LedDisplay::begin()
 {

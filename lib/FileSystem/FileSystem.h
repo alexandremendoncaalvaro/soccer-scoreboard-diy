@@ -8,10 +8,8 @@ class FileSystem
 {
 private:
     bool _debug = false;
-
 public:
-    void set_debug(bool debug);
-
+    void set_debug(bool debug) { _debug = debug; }
     bool saveSettings(String payload);
     String loadSettings();
 

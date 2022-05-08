@@ -1,8 +1,7 @@
 #include "SystemClock.h"
 
-void SystemClock::set_debug(bool debug)
-{
-    _debug = debug;
+bool SystemClock::begin(){
+    return printTime();
 }
 
 time_t SystemClock::getTime()
@@ -20,7 +19,7 @@ void SystemClock::printTwoDigits(int number)
     Serial.print(number);
 }
 
-void SystemClock::printTime()
+bool SystemClock::printTime()
 {
     tmElements_t tm;
 
@@ -51,9 +50,11 @@ void SystemClock::printTime()
             Serial.println(F("DS1307 read error! Please check the circuitry."));
         }
         delay(9000);
+        return false;
     }
     Serial.println();
     delay(1000);
+    return true;
 }
 
 bool SystemClock::setDateTime(int year, int month, int day, int hour, int minute, int second)

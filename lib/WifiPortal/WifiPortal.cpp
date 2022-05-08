@@ -1,10 +1,5 @@
 #include "WifiPortal.h"
 
-void WifiPortal::set_debug(bool debug)
-{
-    _debug = debug;
-}
-
 void WifiPortal::handleColors()
 {
     auto json = server->arg(1);
@@ -13,17 +8,17 @@ void WifiPortal::handleColors()
     size_t capacity = 4 * JSON_OBJECT_SIZE(3) + 20;
     auto doc = fileSystem.jsonToDocument(json, capacity);
 
-    ValueRGB colorT1 = {
+    Digits::ValueRGB colorT1 = {
         doc["t1"]["r"],
         doc["t1"]["g"],
         doc["t1"]["b"]};
 
-    ValueRGB colorT2 = {
+    Digits::ValueRGB colorT2 = {
         doc["t2"]["r"],
         doc["t2"]["g"],
         doc["t2"]["b"]};
 
-    ValueRGB colorTm = {
+    Digits::ValueRGB colorTm = {
         doc["tm"]["r"],
         doc["tm"]["g"],
         doc["tm"]["b"]};
@@ -104,14 +99,18 @@ void WifiPortal::handleClock()
 
     sscanf(doc["datetime"], "%d/%d/%d %d:%d:%d", &day, &month, &year, &hour, &minute, &second);
 
-    if (systemClock.setDateTime(year, month, day, hour, minute, second))
+    if (!systemClock.setDateTime(year, month, day, hour, minute, second))
     {
         if (_debug)
-        {
-            Serial.print(F("[POST CLOCK] JSON: "));
-            Serial.println(json);
-            systemClock.printTime();
-        }
+            Serial.println(F("[WIFI PORTAL] Error setting date time"));
+        server->send(500, "text/json", "{\"result\":\"error\"}");
+        return;
+    }
+    if (_debug)
+    {
+        Serial.print(F("[POST CLOCK] JSON: "));
+        Serial.println(json);
+        systemClock.printTime();
     }
 
     server->send(200, "text/json", "{\"result\":\"ok\"}");

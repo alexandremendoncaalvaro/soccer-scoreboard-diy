@@ -1,10 +1,5 @@
 #include "FileSystem.h"
 
-void FileSystem::set_debug(bool debug)
-{
-    _debug = debug;
-}
-
 bool FileSystem::begin()
 {
     if (_debug)

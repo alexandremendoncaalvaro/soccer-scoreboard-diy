@@ -34,7 +34,7 @@ private:
     // void handleRoot();
 
 public:
-    void set_debug(bool debug);
+    void set_debug(bool debug) { _debug = debug; }
     bool begin();
     void handleClient();
 };
