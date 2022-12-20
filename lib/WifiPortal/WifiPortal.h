@@ -31,6 +31,7 @@ private:
     void handleBrightness();
     void handleClock();
     void handleNotFound();
+    void setScoreTeamA();
     // void handleRoot();
 
 public:

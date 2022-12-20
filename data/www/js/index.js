@@ -70,7 +70,8 @@ function resetScoreboard() {
 }
 
 document.querySelector("#add_team_a").addEventListener("click", (e) => {
-  updateScore('team_a_score', 1, true)
+  newScore = updateScore("team_a_score", 1, true)
+  post("/setscoreteama", { "score": newScore })
 })
 
 document.querySelector("#add_team_b").addEventListener("click", (e) => {
@@ -79,6 +80,7 @@ document.querySelector("#add_team_b").addEventListener("click", (e) => {
 
 document.querySelector("#sub_team_a").addEventListener("click", (e) => {
   updateScore('team_a_score', -1, true)
+  post("/setscoreteama", { "score": newScore})
 })
 
 document.querySelector("#sub_team_b").addEventListener("click", (e) => {
@@ -92,11 +94,12 @@ function changeValue(tagId, newValue) {
 function updateScore(tagId, newValue, isTeamA) {
   currentScore = parseInt(document.querySelector(`#${tagId}`).textContent)
   if (currentScore == 0 && newValue == -1) {
-    return
+    return 0
   }
 
   newScore = currentScore += newValue
   changeValue(tagId, newScore)
+  return newScore
 }
 
 const miliseg = document.querySelector('.milissegundos')

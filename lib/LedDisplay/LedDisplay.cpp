@@ -53,7 +53,10 @@ void LedDisplay::setAllColors(CRGB ledColor)
 
 void LedDisplay::setSeparatedColors()
 {
-    displayNumber(5, 0, _ledColorT1);
+    for (int i = 0; i < 10; i++){
+        displayNumber(i, 0, _ledColorT1);
+        //delay(1000);
+    }
     // for (int i = 0; i < 10; i++)
     // {
     //     leds[i] = _ledColorT1;
@@ -168,5 +171,11 @@ void LedDisplay::displayNumber(byte number, byte segment, CRGB color)
         leds[i + startindex] = ((DIGITS[number] & 1 << i) == 1 << i) ? color : CRGB::Black;
     }
 }
+
+// void LedDisplay::displayNumber(byte number, char segment)
+// {
+//     byte _segment = 0;
+//     displayNumber(number, _segment, _ledColorT1)
+// }
 
 LedDisplay ledDisplay;

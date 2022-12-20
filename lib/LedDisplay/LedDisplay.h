@@ -65,6 +65,7 @@ public:
     void updateLeds();
 
     void displayNumber(byte number, byte segment, CRGB color);
+    // void displayNumber(byte number, byte segment);
 };
 
 extern LedDisplay ledDisplay;
