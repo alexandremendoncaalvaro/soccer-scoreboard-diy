@@ -87,16 +87,12 @@ void WifiPortal::handleBrightness()
 
 void WifiPortal:: setScoreTeamA()
 {
-    auto json = server->arg(1);
+    auto json = server->arg(1);    
     size_t capacity = JSON_OBJECT_SIZE(1) + 40;
     auto doc = fileSystem.jsonToDocument(json, capacity);
 
     byte score = doc["score"];
-    byte segment = 0;
-    //ledDisplay.displayNumber(score, 'a');
-    auto vrgb = ledDisplay.get_LedColor(1);
-    CRGB color = CRGB(vrgb.r, vrgb.g, vrgb.b);
-    ledDisplay.displayNumber(score, segment, color);
+    ledDisplay.set_ScoreTeamA(score);
     
     server->send(200, "text/json", "{\"result\":\"ok\"}");
 }
@@ -183,6 +179,8 @@ bool WifiPortal::begin()
     WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
 
     auto isConnected = WiFi.softAP(_ssid, _password);
+    //WiFi.setAutoReconnect(true);
+    //WiFi.persistent(true);
     delay(500);
 
     if (!isConnected)
