@@ -10,45 +10,48 @@
 </head>
 
 <body>
-    <div class="dynamic-load-common-top"></div>
-
-    <section class="w3-container w3-center w3-padding-64 first-container">
-        <h1 class="w3-opacity"><i>Cor dos Leds</i></h1>
-        <div class="w3-cell-row">
-            <div class="w3-container w3-cell w3-mobile">
-                <p>Time A</p>
-                <p>
-                    <input class="set-led-color" type="color" id="set-led-color-team1" name="led-color-team1" value="#ff0000" />
-                </p>
+    <div class="w3-content w3-padding" style="max-width:1200px">
+        <div class="dynamic-load-common-top"></div>
+        <section class="w3-container w3-center w3-padding-64 first-container">
+            <h1 class="w3-opacity"><i>Cor dos Leds</i></h1>
+            <div class="w3-cell-row">
+                <div class="w3-container w3-cell w3-mobile">
+                    <p>Time A</p>
+                    <p>
+                        <input class="set-led-color" type="color" id="set-led-color-team1" name="led-color-team1"
+                            value="#ff0000" />
+                    </p>
+                </div>
+                <div class="w3-container w3-cell w3-mobile">
+                    <p>Time B</p>
+                    <p>
+                        <input class="set-led-color" type="color" id="set-led-color-team2" name="led-color-team2"
+                            value="#00ff00" />
+                    </p>
+                </div>
+                <div class="w3-container w3-cell w3-mobile">
+                    <p>Timer</p>
+                    <p>
+                        <input class="set-led-color" type="color" id="set-led-color-timer" name="led-color"
+                            value="#0000ff" />
+                    </p>
+                </div>
             </div>
-            <div class="w3-container w3-cell w3-mobile">
-                <p>Time B</p>
-                <p>
-                    <input class="set-led-color" type="color" id="set-led-color-team2" name="led-color-team2" value="#00ff00" />
-                </p>
-            </div>
-            <div class="w3-container w3-cell w3-mobile">
-                <p>Timer</p>
-                <p>
-                    <input class="set-led-color" type="color" id="set-led-color-timer" name="led-color" value="#0000ff" />
-                </p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="w3-container w3-center w3-padding-64 alternative-bg">
-        <h1 class="w3-opacity"><i>Brilho do LED</i></h1>
-        <p>
-            <input type="range" id="set-brightness" min="5" max="255" value="100">
-        </p>
-    </section>
-    
-    <section class="w3-container w3-center w3-padding-64">
-        <a id="save" class="w3-button w3-border" href="">Salvar</a>
-        <p id="save-confirmation"></p>
-    </section>
+        <section class="w3-container w3-center w3-padding-64 alternative-bg">
+            <h1 class="w3-opacity"><i>Brilho do LED</i></h1>
+            <p>
+                <input type="range" id="set-brightness" min="5" max="255" value="255">
+            </p>
+        </section>
 
+        <section class="w3-container w3-center w3-padding-64">
+            <a id="save" class="w3-button w3-border" href="">Salvar</a>
+            <p id="save-confirmation"></p>
+        </section>
 
+    </div>
     <script src="./js/menu.js"></script>
     <script src="./js/dynamic-load.js"></script>
     <script src="./js/rest.js"></script>
