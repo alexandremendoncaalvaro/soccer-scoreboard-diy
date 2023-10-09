@@ -10,64 +10,70 @@
 </head>
 
 <body>
-    <div class="dynamic-load-common-top"></div>
-    <section class="w3-container w3-center w3-padding-64 first-container">
-        <h2>
-            Placar
-        </h2>
-    </section>
-    <div class="w3-row w3-center">
-        <div class="w3-col s4">
-            <div class="w3-card-4">
-                <div class="w3-container w3-right">
-                    <h3>Time A</h3>
-                    <button id="add_team_a" class="w3-button w3-round-xxlarge w3-blue" disabled><i
-                            class="fa fa-plus"></i></button>
-                    <button id="sub_team_a" class="w3-button w3-round-xxlarge w3-orange" disabled><i
-                            class="fa fa-minus"></i></button>
-                </div>
-            </div>
-        </div>
-        <div class="w3-col s4">
-            <div class="w3-card-4">
-                <div class="w3-row" style="padding-top: 16px; padding-bottom: 16px;">
-                    <div class="w3-col s4">
-                        <p class="w3-right h2" id="team_a_score">--</p>
-                    </div>
-                    <div class="w3-col s4">
-                        <h2>x</h2>
-                    </div>
-                    <div class="w3-col s4">
-                        <p class="w3-left h2" id="team_b_score">--</p>
+    <div class="w3-content w3-padding" style="max-width:1200px">
+        <div class="dynamic-load-common-top"></div>
+        <section class="w3-container w3-center w3-padding-64 first-container">
+            <h2>
+                Placar
+            </h2>
+            <div class="w3-cell-row">
+                <div class="w3-container w3-cell w3-mobile">
+                    <div class="w3-card-4">
+                        <div class="w3-row w3-padding-32">
+                            <div class="w3-col s4">
+                                <p class="w3-right h2" id="team_a_score">--</p>
+                            </div>
+                            <div class="w3-col s4">
+                                <h2>x</h2>
+                            </div>
+                            <div class="w3-col s4">
+                                <p class="w3-left h2" id="team_b_score">--</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="w3-col s4">
-            <div class="w3-card-4">
-                <div class="w3-container w3-left">
-                    <h3>Time B</h3>
-                    <button id="add_team_b" class="w3-button w3-round-xxlarge w3-blue" disabled><i
-                            class="fa fa-plus"></i></button>
-                    <button id="sub_team_b" class="w3-button w3-round-xxlarge w3-orange" disabled><i
-                            class="fa fa-minus"></i></button>
+            <div class="w3-cell-row">
+                <div class="w3-container w3-cell w3-mobile">
+                    <div class="w3-content w3-padding-large">
+                        <h3>Time A</h3>
+                        <button id="add_team_a" class="w3-button w3-round w3-xxlarge w3-border w3-blue" disabled><i
+                                class="fa fa-plus"></i></button>
+                        <button id="sub_team_a" class="w3-button w3-round w3-xxlarge w3-border w3-deep-purple" disabled><i
+                                class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+
+                <div class="w3-container w3-cell w3-mobile">
+                    <div class="w3-content w3-padding-large">
+                        <h3>Time B</h3>
+                        <button id="add_team_b" class="w3-button w3-round w3-xxlarge w3-border w3-blue" disabled><i
+                                class="fa fa-plus"></i></button>
+                        <button id="sub_team_b" class="w3-button w3-round w3-xxlarge w3-border w3-deep-purple" disabled><i
+                                class="fa fa-minus"></i></button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="w3-row w3-center" style="padding-top: 32px;">
-        <div class="w3-col">
-            <button id="start" class="w3-button w3-grey w3-round-xxlarge"><i class="fa fa-play"></i></button>
-            <button id="pause" class="w3-button w3-grey w3-round-xxlarge" disabled><i class="fa fa-pause"></i></button>
-            <button id="stop" class="w3-button w3-grey w3-round-xxlarge" disabled><i class="fa fa-stop"></i></button>
-        </div>
-    </div>
-    <div class="w3-row w3-center" style="padding-top: 32px;">
-        <div class="w3-col">
-            <p class="tempo">
-                <span class="horas">00</span>:<span class="minutos">00</span>:<span class="segundos">00</span>:<span class="milissegundos">00</span>
-            </p>
-        </div>
+
+            <div class="w3-row w3-center" style="padding-top: 32px;">
+                <div class="w3-col">
+                    <button id="start" class="w3-button w3-round w3-border w3-xxlarge"><i
+                            class="fa fa-play"></i></button>
+                    <button id="pause" class="w3-button w3-round w3-border w3-xxlarge" disabled><i
+                            class="fa fa-pause"></i></button>
+                    <button id="stop" class="w3-button w3-round w3-border w3-xxlarge" disabled><i
+                            class="fa fa-stop"></i></button>
+                </div>
+            </div>
+            <div class="w3-row w3-center" style="padding-top: 32px;">
+                <div class="w3-col">
+                    <p class="tempo">
+                        <span class="horas">00</span>:<span class="minutos">00</span>:<span
+                            class="segundos">00</span>:<span class="milissegundos">00</span>
+                    </p>
+                </div>
+            </div>
+        </section>
     </div>
 
     <script src="./js/menu.js"></script>
