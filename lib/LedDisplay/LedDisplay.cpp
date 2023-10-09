@@ -52,9 +52,19 @@ void LedDisplay::setAllColors(CRGB ledColor)
 }
 
 void LedDisplay::setSeparatedColors()
-{    
-    displayNumber(get_ScoreTeamA(), 0, _ledColorT1);
-    //displayNumber(get_ScoreTeamB(), 1, _ledColorT2);
+{
+    byte score = get_ScoreTeamA() > 99 ? 99 : get_ScoreTeamA();    
+    byte firstDigit = get_FirstDigit(score);
+    byte secondDigit = get_SecondDigit(score);
+    displayNumber(secondDigit, 0, _ledColorT1, false);
+    displayNumber(firstDigit, 1, _ledColorT1, true);
+
+    score = get_ScoreTeamB() > 99 ? 99 : get_ScoreTeamB();
+    firstDigit = get_FirstDigit(score);
+    secondDigit = get_SecondDigit(score);
+    displayNumber(secondDigit, 2, _ledColorT2, false);
+    displayNumber(firstDigit, 3, _ledColorT2, true);
+    
     //displayNumber(get_Time(), 2, _ledColorTm);
     
     // for (int i = 0; i < 10; i++)
@@ -69,6 +79,16 @@ void LedDisplay::setSeparatedColors()
     // {
     //     leds[i] = _ledColorTm;
     // }
+}
+
+byte LedDisplay::get_FirstDigit(byte score) 
+{
+    return score / 10 % 10;
+}
+
+byte LedDisplay::get_SecondDigit(byte score)
+{
+    return score % 10;
 }
 
 void LedDisplay::set_LedColor(ValueRGB color, int id)
@@ -137,7 +157,7 @@ void LedDisplay::updateLeds()
     yield();
 }
 
-void LedDisplay::displayNumber(byte number, byte segment, CRGB color)
+void LedDisplay::displayNumber(byte number, byte segment, CRGB color, boolean isFirstDigit)
 {
     /*
       __ __ __        __ __ __          __ __ __        __ __ __
@@ -163,6 +183,7 @@ void LedDisplay::displayNumber(byte number, byte segment, CRGB color)
     // top segment from left to right:    7, 6, 5, 4
     // bottom segment from left to right: 3, 2, 1, 0
 
+    color = isFirstDigit ? CRGB::Black : color;
     byte startindex = segment < 2 ? (segment * 21) : (segment * 21) + 2;
 
     for (byte i = 0; i < 21; i++)

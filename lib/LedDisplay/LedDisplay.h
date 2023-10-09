@@ -22,7 +22,7 @@ namespace Digits
         0b111111000111000000111, // [4] 4
         0b111000111111000111111, // [5] 5
         0b111000111111111111111, // [6] 6
-        0b111111111000000000111, // [7] 7
+        0b000111111000000000111, // [7] 7
         0b111111111111111111111, // [8] 8
         0b111111111111000111111, // [9] 9
         0b000000000000000000000, // [10] off
@@ -52,6 +52,9 @@ private:
     byte scoreTeamA = 0;
     byte scoreTeamB = 0;
 
+    byte get_FirstDigit(byte score);
+    byte get_SecondDigit(byte score);
+
 public:
     void set_debug(bool debug) { _debug = debug; }
 
@@ -66,7 +69,7 @@ public:
 
     void updateLeds();
 
-    void displayNumber(byte number, byte segment, CRGB color);
+    void displayNumber(byte number, byte segment, CRGB color, boolean isFirstDigit);
 
     void set_ScoreTeamA(byte newScore);
     byte get_ScoreTeamA();

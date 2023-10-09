@@ -32,6 +32,7 @@ private:
     void handleClock();
     void handleNotFound();
     void setScoreTeamA();
+    void setScoreTeamB();
     // void handleRoot();
 
 public:

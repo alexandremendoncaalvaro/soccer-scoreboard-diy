@@ -97,6 +97,18 @@ void WifiPortal:: setScoreTeamA()
     server->send(200, "text/json", "{\"result\":\"ok\"}");
 }
 
+void WifiPortal:: setScoreTeamB()
+{
+    auto json = server->arg(1);    
+    size_t capacity = JSON_OBJECT_SIZE(1) + 40;
+    auto doc = fileSystem.jsonToDocument(json, capacity);
+
+    byte score = doc["score"];
+    ledDisplay.set_ScoreTeamB(score);
+    
+    server->send(200, "text/json", "{\"result\":\"ok\"}");
+}
+
 void WifiPortal::handleClock()
 {
     // DD/MM/YYYY hh:mm:ss
@@ -211,6 +223,7 @@ bool WifiPortal::begin()
     server->on(String(F("/setclock")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleClock, this));
     server->on(String(F("/save")).c_str(), HTTP_GET, std::bind(&WifiPortal::handleSaveSettings, this));
     server->on(String(F("/setscoreteama")).c_str(), HTTP_POST, std::bind(&WifiPortal::setScoreTeamA, this));
+    server->on(String(F("/setscoreteamb")).c_str(), HTTP_POST, std::bind(&WifiPortal::setScoreTeamB, this));
 
     server->serveStatic("/", LittleFS, "/www/", "max-age=86400");
     server->serveStatic("/index.html", LittleFS, "/www/index.html", "max-age=86400");
