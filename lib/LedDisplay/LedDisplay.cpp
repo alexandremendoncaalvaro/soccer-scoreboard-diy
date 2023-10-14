@@ -53,17 +53,21 @@ void LedDisplay::setAllColors(CRGB ledColor)
 
 void LedDisplay::setSeparatedColors()
 {
-    byte score = get_ScoreTeamA() > 99 ? 99 : get_ScoreTeamA();    
+    byte score = get_ScoreTeamA();    
     byte firstDigit = get_FirstDigit(score);
     byte secondDigit = get_SecondDigit(score);
-    displayNumber(secondDigit, 0, _ledColorT1, false);
-    displayNumber(firstDigit, 1, _ledColorT1, true);
+    displayNumber(secondDigit, 6, _ledColorT1, false);
+    displayNumber(firstDigit, 7, _ledColorT1, true);
+    displayNumber(secondDigit, 2, _ledColorT1, false);
+    displayNumber(firstDigit, 3, _ledColorT1, true);
 
-    score = get_ScoreTeamB() > 99 ? 99 : get_ScoreTeamB();
+    score = get_ScoreTeamB();
     firstDigit = get_FirstDigit(score);
     secondDigit = get_SecondDigit(score);
-    displayNumber(secondDigit, 2, _ledColorT2, false);
-    displayNumber(firstDigit, 3, _ledColorT2, true);
+    displayNumber(secondDigit, 4, _ledColorT2, false);
+    displayNumber(firstDigit, 5, _ledColorT2, true);
+    displayNumber(secondDigit, 0, _ledColorT2, false);
+    displayNumber(firstDigit, 1, _ledColorT2, true);
     
     //displayNumber(get_Time(), 2, _ledColorTm);
     
@@ -157,7 +161,7 @@ void LedDisplay::updateLeds()
     yield();
 }
 
-void LedDisplay::displayNumber(byte number, byte segment, CRGB color, boolean isFirstDigit)
+void LedDisplay::displayNumber(byte number, byte segment, CRGB color, boolean blackIfZero)
 {
     /*
       __ __ __        __ __ __          __ __ __        __ __ __
@@ -183,7 +187,7 @@ void LedDisplay::displayNumber(byte number, byte segment, CRGB color, boolean is
     // top segment from left to right:    7, 6, 5, 4
     // bottom segment from left to right: 3, 2, 1, 0
 
-    color = isFirstDigit ? CRGB::Black : color;
+    color = blackIfZero && number == 0 ? CRGB::Black : color;
     byte startindex = segment < 2 ? (segment * 21) : (segment * 21) + 2;
 
     for (byte i = 0; i < 21; i++)
@@ -195,12 +199,12 @@ void LedDisplay::displayNumber(byte number, byte segment, CRGB color, boolean is
 
 void LedDisplay::set_ScoreTeamA(byte score)
 {
-    scoreTeamA = score;
+    scoreTeamA = score > 99 ? 99 : score;
 }
 
 void LedDisplay::set_ScoreTeamB(byte score)
 {
-    scoreTeamB = score;
+    scoreTeamB = score > 99 ? 99 : score;
 }
 
 byte LedDisplay::get_ScoreTeamA()

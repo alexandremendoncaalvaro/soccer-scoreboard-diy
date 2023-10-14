@@ -2,18 +2,20 @@
 
 void setup()
 {
-  BasicSettings::setLibsDebugOption(true);
-  BasicSettings::SerialBegin();
-  if(!fileSystem.begin()){ return; };
-  if(!wifiPortal.begin()){ return; };
-  if(!ledDisplay.begin()){ return; };
-  BasicSettings::LoadSettings();
+    BasicSettings::setLibsDebugOption(true);
+    BasicSettings::SerialBegin();
+    if(!fileSystem.begin()){ return; };
+    if(!wifiPortal.begin()){ return; };
+    if(!ledDisplay.begin()){ return; };
+    if(!irRemote.begin()){ return; }
+    BasicSettings::LoadSettings();
 }
 
 void loop()
 {
-  wifiPortal.handleClient();
-  ledDisplay.updateLeds();
+    wifiPortal.handleClient();
+    ledDisplay.updateLeds();
+    irRemote.process();
 }
 
 namespace BasicSettings
@@ -25,6 +27,7 @@ namespace BasicSettings
         fileSystem.set_debug(_debug);
         wifiPortal.set_debug(_debug);
         ledDisplay.set_debug(_debug);
+        irRemote.set_debug(_debug);
     }
 
     void SerialBegin(unsigned long baudrate)
