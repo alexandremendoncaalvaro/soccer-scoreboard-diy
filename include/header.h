@@ -2,6 +2,7 @@
 #include "SystemClock.h"
 #include "FileSystem.h"
 #include "WifiPortal.h"
+#include "IRRemote.h"
 
 namespace BasicSettings
 {

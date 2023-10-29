@@ -75,16 +75,18 @@ document.querySelector("#add_team_a").addEventListener("click", (e) => {
 })
 
 document.querySelector("#add_team_b").addEventListener("click", (e) => {
-  updateScore('team_b_score', 1, false)
+  newScore = updateScore('team_b_score', 1, false)
+  post("/setscoreteamb", { "score": newScore })
 })
 
 document.querySelector("#sub_team_a").addEventListener("click", (e) => {
-  updateScore('team_a_score', -1, true)
+  newScore = updateScore('team_a_score', -1, true)
   post("/setscoreteama", { "score": newScore})
 })
 
 document.querySelector("#sub_team_b").addEventListener("click", (e) => {
-  updateScore('team_b_score', -1, false)
+  newScore = updateScore('team_b_score', -1, false)
+  post("/setscoreteamb", { "score": newScore })
 })
 
 function changeValue(tagId, newValue) {
