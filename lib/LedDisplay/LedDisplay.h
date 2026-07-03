@@ -76,7 +76,7 @@ public:
 
     void updateLeds();
 
-    void displayNumber(byte number, byte segment, CRGB color, boolean isFirstDigit);
+    void displayNumber(byte number, byte segment, CRGB color, boolean blackIfZero);
 
     void set_ScoreTeamA(byte newScore);
     byte get_ScoreTeamA();
