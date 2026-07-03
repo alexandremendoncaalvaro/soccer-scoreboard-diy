@@ -4,12 +4,6 @@ bool SystemClock::begin(){
     return printTime();
 }
 
-time_t SystemClock::getTime()
-{
-    auto currentTime = now();
-    return currentTime;
-}
-
 void SystemClock::printTwoDigits(int number)
 {
     if (number >= 0 && number < 10)
@@ -69,11 +63,7 @@ bool SystemClock::setDateTime(int year, int month, int day, int hour, int minute
     timeElements.Minute = minute;
     timeElements.Second = second;
 
-    auto ret = RTC.write(timeElements);
-
-    delay(1000);
-
-    return ret;
+    return RTC.write(timeElements);
 }
 
 SystemClock systemClock;
