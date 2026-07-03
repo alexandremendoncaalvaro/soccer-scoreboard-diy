@@ -14,7 +14,7 @@ class IRRemote
 {
 private:
     bool _debug = false;
-    IRrecv* irrecv;
+    IRrecv irrecv{D4};
     decode_results results;
 public:
     void set_debug(bool debug) { _debug = debug; }

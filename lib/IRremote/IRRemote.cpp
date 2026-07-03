@@ -6,14 +6,13 @@ using namespace IRControls;
 
 bool IRRemote::begin()
 {
-    IRRemote::irrecv = new IRrecv(D4);
-    IRRemote::irrecv->enableIRIn();
+    irrecv.enableIRIn();
     return true;
 }
 
 void IRRemote::process()
 {
-    if (irrecv->decode(&results))
+    if (irrecv.decode(&results))
     {
         if (_debug) {
             Serial.println(results.value, HEX);
@@ -46,6 +45,6 @@ void IRRemote::process()
             break;
         }
 
-        irrecv->resume();
+        irrecv.resume();
     }
 }
