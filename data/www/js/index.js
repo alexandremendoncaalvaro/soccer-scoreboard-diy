@@ -94,12 +94,12 @@ function changeValue(tagId, newValue) {
 }
 
 function updateScore(tagId, newValue, isTeamA) {
-  currentScore = parseInt(document.querySelector(`#${tagId}`).textContent)
+  let currentScore = parseInt(document.querySelector(`#${tagId}`).textContent)
   if (currentScore == 0 && newValue == -1) {
     return 0
   }
 
-  newScore = currentScore += newValue
+  let newScore = (currentScore + newValue) % 100
   changeValue(tagId, newScore)
   return newScore
 }
