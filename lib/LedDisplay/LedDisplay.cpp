@@ -50,16 +50,15 @@ void LedDisplay::testLeds()
     Serial.print("Total Leds: ");
     Serial.println(_totalLeds);
 
+    FastLED.setBrightness(_ledBrightness);
     for (int i = 0; i < _totalLeds; i++)
     {
         leds[i] = CRGB::Red;
-        FastLED.setBrightness(_ledBrightness);
         FastLED.show();
-        delay(250);
+        delay(88);
     }
 
     Serial.println("Tests were finished!");
-    delay(3000);
 }
 
 void LedDisplay::setAllColors(CRGB ledColor)
