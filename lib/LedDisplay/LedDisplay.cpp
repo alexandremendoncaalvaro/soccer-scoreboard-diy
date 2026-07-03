@@ -40,8 +40,8 @@ bool LedDisplay::begin(uint8_t ledPin)
         break;
     }
     setAllColors(CRGB::Black);
-    // FastLED.setBrightness(_ledBrightness);
-    // updateLeds();
+    FastLED.setBrightness(0);
+    FastLED.show();
     return true;
 }
 
