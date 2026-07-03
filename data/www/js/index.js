@@ -151,7 +151,7 @@ function minutos() {
     min.innerHTML = minNum
   }
 
-  if (horNum == 59) {
+  if (minNum == 59) {
     minNum = 0
     horas()
   }
