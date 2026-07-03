@@ -1,7 +1,4 @@
-#pragma once
-
 #include "TimeControl.h"
-#include <HardwareSerial.h>
 
 TimeControl timeControl(0);
 
