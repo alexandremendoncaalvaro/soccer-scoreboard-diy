@@ -85,27 +85,27 @@ void WifiPortal::handleBrightness()
     server->send(200, "text/json", "{\"result\":\"ok\"}");
 }
 
-void WifiPortal:: setScoreTeamA()
+void WifiPortal::setScoreTeamA()
 {
-    auto json = server->arg(1);    
+    auto json = server->arg(1);
     size_t capacity = JSON_OBJECT_SIZE(1) + 40;
     auto doc = fileSystem.jsonToDocument(json, capacity);
 
     byte score = doc["score"];
     ledDisplay.set_ScoreTeamA(score);
-    
+
     server->send(200, "text/json", "{\"result\":\"ok\"}");
 }
 
-void WifiPortal:: setScoreTeamB()
+void WifiPortal::setScoreTeamB()
 {
-    auto json = server->arg(1);    
+    auto json = server->arg(1);
     size_t capacity = JSON_OBJECT_SIZE(1) + 40;
     auto doc = fileSystem.jsonToDocument(json, capacity);
 
     byte score = doc["score"];
     ledDisplay.set_ScoreTeamB(score);
-    
+
     server->send(200, "text/json", "{\"result\":\"ok\"}");
 }
 
@@ -120,9 +120,19 @@ void WifiPortal::handleClock()
     auto doc = fileSystem.jsonToDocument(json, capacity);
 
     int year, month, day, hour, minute, second;
-
-    sscanf(doc["datetime"], "%d/%d/%d %d:%d:%d", &day, &month, &year, &hour, &minute, &second);
-
+    const char *datetime = doc["datetime"];
+    // Validação simples do formato: 10 caracteres para data, espaço, 8 para hora
+    if (!datetime || strlen(datetime) != 19 || datetime[2] != '/' || datetime[5] != '/' || datetime[10] != ' ' || datetime[13] != ':' || datetime[16] != ':')
+    {
+        server->send(400, "text/json", "{\"result\":\"error\",\"message\":\"Formato esperado: DD/MM/YYYY hh:mm:ss\"}");
+        return;
+    }
+    int parsed = sscanf(datetime, "%d/%d/%d %d:%d:%d", &day, &month, &year, &hour, &minute, &second);
+    if (parsed != 6 || hour < 0 || hour > 23 || minute < 0 || minute > 59 || second < 0 || second > 59 || day < 1 || day > 31 || month < 1 || month > 12)
+    {
+        server->send(400, "text/json", "{\"result\":\"error\",\"message\":\"Valores inválidos para data/hora\"}");
+        return;
+    }
     if (!systemClock.setDateTime(year, month, day, hour, minute, second))
     {
         if (_debug)
@@ -191,8 +201,8 @@ bool WifiPortal::begin()
     WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
 
     auto isConnected = WiFi.softAP(_ssid, _password);
-    //WiFi.setAutoReconnect(true);
-    //WiFi.persistent(true);
+    // WiFi.setAutoReconnect(true);
+    // WiFi.persistent(true);
     delay(500);
 
     if (!isConnected)

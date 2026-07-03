@@ -72,7 +72,7 @@ void LedDisplay::setAllColors(CRGB ledColor)
 
 void LedDisplay::setSeparatedColors()
 {
-    byte score = get_ScoreTeamA();    
+    byte score = get_ScoreTeamA();
     byte firstDigit = get_FirstDigit(score);
     byte secondDigit = get_SecondDigit(score);
     displayNumber(secondDigit, 6, _ledColorT1, false);
@@ -87,7 +87,7 @@ void LedDisplay::setSeparatedColors()
     scoreboardClock.updateTime();
 }
 
-byte LedDisplay::get_FirstDigit(byte score) 
+byte LedDisplay::get_FirstDigit(byte score)
 {
     return score / 10 % 10;
 }
@@ -203,11 +203,13 @@ void LedDisplay::displayNumber(byte number, byte segment, CRGB color, boolean bl
 void LedDisplay::set_ScoreTeamA(byte score)
 {
     scoreTeamA = score > Digits::MAX_SCORE ? Digits::MAX_SCORE : score;
+    updateLeds();
 }
 
 void LedDisplay::set_ScoreTeamB(byte score)
 {
     scoreTeamB = score > Digits::MAX_SCORE ? Digits::MAX_SCORE : score;
+    updateLeds();
 }
 
 byte LedDisplay::get_ScoreTeamA()
@@ -229,7 +231,8 @@ void LedDisplay::blinkDots()
     yield();
 }
 
-void LedDisplay::set_Time() {
+void LedDisplay::set_Time()
+{
     // if (_debug) {
     //     Serial.print(timeControl.h1);
     //     Serial.print(timeControl.h2);
@@ -241,17 +244,20 @@ void LedDisplay::set_Time() {
     //     Serial.println(timeControl.s2);
     // }
 
-    if (timeControl.h1 > 0 || timeControl.h2 > 0) {
+    if (timeControl.h1 > 0 || timeControl.h2 > 0)
+    {
         displayNumber(timeControl.h1, 3, _ledColorTm, true);
         displayNumber(timeControl.h2, 2, _ledColorTm, false);
         displayNumber(timeControl.m1, 1, _ledColorTm, false);
         displayNumber(timeControl.m2, 0, _ledColorTm, false);
-    } else {
+    }
+    else
+    {
         displayNumber(timeControl.m1, 3, _ledColorTm, true);
         displayNumber(timeControl.m2, 2, _ledColorTm, false);
         displayNumber(timeControl.s1, 1, _ledColorTm, false);
         displayNumber(timeControl.s2, 0, _ledColorTm, false);
-    }    
+    }
     yield();
 }
 
