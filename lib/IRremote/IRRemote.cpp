@@ -33,12 +33,12 @@ void IRRemote::process()
             ledDisplay.set_ScoreTeamA(score);
             break;
         case PLUS_B:
-        if (_debug) { Serial.println("Chamou o PLUS_B"); }
+            if (_debug) { Serial.println("Chamou o PLUS_B"); }
             score = ledDisplay.get_ScoreTeamB() + 1;
             ledDisplay.set_ScoreTeamB(score);
             break;
         case SUB_B:
-        if (_debug) { Serial.println("Chamou o SUB_A"); }
+            if (_debug) { Serial.println("Chamou o SUB_B"); }
             score = ledDisplay.get_ScoreTeamB() - 1;
             ledDisplay.set_ScoreTeamB(score);
             break;
