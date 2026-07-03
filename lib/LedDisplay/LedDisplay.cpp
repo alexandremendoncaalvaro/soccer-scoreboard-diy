@@ -5,7 +5,7 @@ using namespace Digits;
 bool LedDisplay::begin()
 {
     bool initiated = begin(D3);
-    testLeds();
+    if (initiated) testLeds();
     return initiated;
 }
 
