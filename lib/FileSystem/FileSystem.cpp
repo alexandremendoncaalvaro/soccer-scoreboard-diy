@@ -33,7 +33,7 @@ bool FileSystem::begin()
     return true;
 }
 
-DynamicJsonDocument FileSystem::jsonToDocument(String json, size_t capacity)
+DynamicJsonDocument FileSystem::jsonToDocument(const String& json, size_t capacity)
 {
     DynamicJsonDocument doc(capacity);
     auto deserializationError = deserializeJson(doc, json);
@@ -85,6 +85,7 @@ String FileSystem::loadSettings()
     {
         if (_debug)
             Serial.println(F("[FILESYSTEM] Config file size is too large"));
+        configFile.close();
         return "";
     }
 

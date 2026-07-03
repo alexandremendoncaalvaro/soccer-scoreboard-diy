@@ -14,7 +14,7 @@ public:
     String loadSettings();
 
     // https://arduinojson.org/v6/assistant/
-    DynamicJsonDocument jsonToDocument(String json, size_t capacity);
+    DynamicJsonDocument jsonToDocument(const String& json, size_t capacity);
     
     bool begin();
 };
