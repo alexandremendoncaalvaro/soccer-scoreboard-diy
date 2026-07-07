@@ -165,6 +165,8 @@ void WifiPortal::handlePauseTimer()
 void WifiPortal::handleStopTimer()
 {
     scoreboardClock.stopTimer();
+    ledDisplay.set_ScoreTeamA(0);
+    ledDisplay.set_ScoreTeamB(0);
     server->send(200, "text/json", "{\"result\":\"ok\"}");
 }
 
