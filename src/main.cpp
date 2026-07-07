@@ -35,13 +35,11 @@ namespace BasicSettings
     void SerialBegin(unsigned long baudrate)
     {
         Serial.begin(baudrate);
+        systemClock.begin();
         if (_debug)
         {
             Serial.println(F("[SYSTEM] Serial Ok!"));
             Serial.println();
-
-            Serial.println(F("[SYSTEM] Checking system Real Time Clock..."));
-            systemClock.begin();
         }
     }
 

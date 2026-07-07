@@ -43,10 +43,15 @@ void ScoreboardClock::updateTime()
         int h, m, s;
         if (systemClock.readTime(h, m, s))
         {
+            Serial.printf("[CLOCK] RTC ok: %02d:%02d:%02d\n", h, m, s);
             unsigned long ms = ((unsigned long)h * 3600 + (unsigned long)m * 60 + s) * 1000UL;
             timeControl.update_Time(ms);
             ledDisplay.blinkDots();
             ledDisplay.set_Time();
+        }
+        else
+        {
+            Serial.println("[CLOCK] readTime() falhou");
         }
     }
 }
