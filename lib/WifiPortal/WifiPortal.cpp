@@ -150,6 +150,41 @@ void WifiPortal::handleClock()
     server->send(200, "text/json", "{\"result\":\"ok\"}");
 }
 
+void WifiPortal::handleStartTimer()
+{
+    scoreboardClock.startResumeTimer();
+    server->send(200, "text/json", "{\"result\":\"ok\"}");
+}
+
+void WifiPortal::handlePauseTimer()
+{
+    scoreboardClock.pauseTimer();
+    server->send(200, "text/json", "{\"result\":\"ok\"}");
+}
+
+void WifiPortal::handleStopTimer()
+{
+    scoreboardClock.stopTimer();
+    server->send(200, "text/json", "{\"result\":\"ok\"}");
+}
+
+void WifiPortal::handleSetDisplayMode()
+{
+    auto json = server->arg(1);
+    size_t capacity = JSON_OBJECT_SIZE(1) + 20;
+    auto doc = fileSystem.jsonToDocument(json, capacity);
+
+    const char *mode = doc["mode"];
+    if (!mode)
+    {
+        server->send(400, "text/json", "{\"result\":\"error\",\"message\":\"Campo mode ausente\"}");
+        return;
+    }
+
+    scoreboardClock.setDisplayMode(strcmp(mode, "clock") == 0);
+    server->send(200, "text/json", "{\"result\":\"ok\"}");
+}
+
 void WifiPortal::handleNotFound()
 {
     const char *metaRefreshStr = "<head><meta http-equiv=\"refresh\" content=\"0; url=http://192.168.1.1/index.html\" /></head><body><p>redirecting...</p></body>";
@@ -234,6 +269,10 @@ bool WifiPortal::begin()
     server->on(String(F("/save")).c_str(), HTTP_GET, std::bind(&WifiPortal::handleSaveSettings, this));
     server->on(String(F("/setscoreteama")).c_str(), HTTP_POST, std::bind(&WifiPortal::setScoreTeamA, this));
     server->on(String(F("/setscoreteamb")).c_str(), HTTP_POST, std::bind(&WifiPortal::setScoreTeamB, this));
+    server->on(String(F("/starttimer")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleStartTimer, this));
+    server->on(String(F("/pausetimer")).c_str(), HTTP_POST, std::bind(&WifiPortal::handlePauseTimer, this));
+    server->on(String(F("/stoptimer")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleStopTimer, this));
+    server->on(String(F("/setdisplaymode")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleSetDisplayMode, this));
 
     server->serveStatic("/", LittleFS, "/www/", "max-age=86400");
     server->serveStatic("/index.html", LittleFS, "/www/index.html", "max-age=86400");

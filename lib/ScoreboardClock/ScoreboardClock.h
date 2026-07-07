@@ -8,6 +8,7 @@ class ScoreboardClock
 {
 private:
     bool _debug = false;
+    bool _showRTCClock = false;
 public:
     unsigned long currentMillis = millis();
     unsigned long prevTime = 0;
@@ -20,6 +21,7 @@ public:
     void updateTime();
     void pauseTimer();
     void stopTimer();
+    void setDisplayMode(bool showClock);
 };
 
 extern ScoreboardClock scoreboardClock;
