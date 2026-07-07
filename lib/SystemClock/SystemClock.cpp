@@ -51,6 +51,17 @@ bool SystemClock::printTime()
     return true;
 }
 
+bool SystemClock::readTime(int& hour, int& minute, int& second)
+{
+    tmElements_t tm;
+    if (!RTC.read(tm))
+        return false;
+    hour = tm.Hour;
+    minute = tm.Minute;
+    second = tm.Second;
+    return true;
+}
+
 bool SystemClock::setDateTime(int year, int month, int day, int hour, int minute, int second)
 {
     tmElements_t timeElements;
