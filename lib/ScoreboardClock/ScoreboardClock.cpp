@@ -39,12 +39,12 @@ void ScoreboardClock::updateTime()
     // Modo relógio: display atualizado com hora do RTC em paralelo
     if (_showRTCClock && (currentMillis - _clockPrevTime >= 1000))
     {
+        _clockPrevTime = currentMillis;
         int h, m, s;
         if (systemClock.readTime(h, m, s))
         {
             unsigned long ms = ((unsigned long)h * 3600 + (unsigned long)m * 60 + s) * 1000UL;
             timeControl.update_Time(ms);
-            _clockPrevTime = currentMillis;
             ledDisplay.blinkDots();
             ledDisplay.set_Time();
         }
