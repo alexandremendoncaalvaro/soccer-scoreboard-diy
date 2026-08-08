@@ -85,27 +85,27 @@ void WifiPortal::handleBrightness()
     server->send(200, "text/json", "{\"result\":\"ok\"}");
 }
 
-void WifiPortal:: setScoreTeamA()
+void WifiPortal::setScoreTeamA()
 {
-    auto json = server->arg(1);    
+    auto json = server->arg(1);
     size_t capacity = JSON_OBJECT_SIZE(1) + 40;
     auto doc = fileSystem.jsonToDocument(json, capacity);
 
     byte score = doc["score"];
     ledDisplay.set_ScoreTeamA(score);
-    
+
     server->send(200, "text/json", "{\"result\":\"ok\"}");
 }
 
-void WifiPortal:: setScoreTeamB()
+void WifiPortal::setScoreTeamB()
 {
-    auto json = server->arg(1);    
+    auto json = server->arg(1);
     size_t capacity = JSON_OBJECT_SIZE(1) + 40;
     auto doc = fileSystem.jsonToDocument(json, capacity);
 
     byte score = doc["score"];
     ledDisplay.set_ScoreTeamB(score);
-    
+
     server->send(200, "text/json", "{\"result\":\"ok\"}");
 }
 
@@ -120,9 +120,19 @@ void WifiPortal::handleClock()
     auto doc = fileSystem.jsonToDocument(json, capacity);
 
     int year, month, day, hour, minute, second;
-
-    sscanf(doc["datetime"], "%d/%d/%d %d:%d:%d", &day, &month, &year, &hour, &minute, &second);
-
+    const char *datetime = doc["datetime"];
+    // Validação simples do formato: 10 caracteres para data, espaço, 8 para hora
+    if (!datetime || strlen(datetime) != 19 || datetime[2] != '/' || datetime[5] != '/' || datetime[10] != ' ' || datetime[13] != ':' || datetime[16] != ':')
+    {
+        server->send(400, "text/json", "{\"result\":\"error\",\"message\":\"Formato esperado: DD/MM/YYYY hh:mm:ss\"}");
+        return;
+    }
+    int parsed = sscanf(datetime, "%d/%d/%d %d:%d:%d", &day, &month, &year, &hour, &minute, &second);
+    if (parsed != 6 || hour < 0 || hour > 23 || minute < 0 || minute > 59 || second < 0 || second > 59 || day < 1 || day > 31 || month < 1 || month > 12)
+    {
+        server->send(400, "text/json", "{\"result\":\"error\",\"message\":\"Valores inválidos para data/hora\"}");
+        return;
+    }
     if (!systemClock.setDateTime(year, month, day, hour, minute, second))
     {
         if (_debug)
@@ -137,6 +147,43 @@ void WifiPortal::handleClock()
         systemClock.printTime();
     }
 
+    server->send(200, "text/json", "{\"result\":\"ok\"}");
+}
+
+void WifiPortal::handleStartTimer()
+{
+    scoreboardClock.startResumeTimer();
+    server->send(200, "text/json", "{\"result\":\"ok\"}");
+}
+
+void WifiPortal::handlePauseTimer()
+{
+    scoreboardClock.pauseTimer();
+    server->send(200, "text/json", "{\"result\":\"ok\"}");
+}
+
+void WifiPortal::handleStopTimer()
+{
+    scoreboardClock.stopTimer();
+    ledDisplay.set_ScoreTeamA(0);
+    ledDisplay.set_ScoreTeamB(0);
+    server->send(200, "text/json", "{\"result\":\"ok\"}");
+}
+
+void WifiPortal::handleSetDisplayMode()
+{
+    auto json = server->arg(1);
+    size_t capacity = JSON_OBJECT_SIZE(1) + 20;
+    auto doc = fileSystem.jsonToDocument(json, capacity);
+
+    const char *mode = doc["mode"];
+    if (!mode)
+    {
+        server->send(400, "text/json", "{\"result\":\"error\",\"message\":\"Campo mode ausente\"}");
+        return;
+    }
+
+    scoreboardClock.setDisplayMode(strcmp(mode, "clock") == 0);
     server->send(200, "text/json", "{\"result\":\"ok\"}");
 }
 
@@ -191,8 +238,8 @@ bool WifiPortal::begin()
     WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
 
     auto isConnected = WiFi.softAP(_ssid, _password);
-    //WiFi.setAutoReconnect(true);
-    //WiFi.persistent(true);
+    // WiFi.setAutoReconnect(true);
+    // WiFi.persistent(true);
     delay(500);
 
     if (!isConnected)
@@ -224,6 +271,10 @@ bool WifiPortal::begin()
     server->on(String(F("/save")).c_str(), HTTP_GET, std::bind(&WifiPortal::handleSaveSettings, this));
     server->on(String(F("/setscoreteama")).c_str(), HTTP_POST, std::bind(&WifiPortal::setScoreTeamA, this));
     server->on(String(F("/setscoreteamb")).c_str(), HTTP_POST, std::bind(&WifiPortal::setScoreTeamB, this));
+    server->on(String(F("/starttimer")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleStartTimer, this));
+    server->on(String(F("/pausetimer")).c_str(), HTTP_POST, std::bind(&WifiPortal::handlePauseTimer, this));
+    server->on(String(F("/stoptimer")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleStopTimer, this));
+    server->on(String(F("/setdisplaymode")).c_str(), HTTP_POST, std::bind(&WifiPortal::handleSetDisplayMode, this));
 
     server->serveStatic("/", LittleFS, "/www/", "max-age=86400");
     server->serveStatic("/index.html", LittleFS, "/www/index.html", "max-age=86400");

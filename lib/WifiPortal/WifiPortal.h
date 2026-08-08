@@ -33,6 +33,10 @@ private:
     void handleNotFound();
     void setScoreTeamA();
     void setScoreTeamB();
+    void handleStartTimer();
+    void handlePauseTimer();
+    void handleStopTimer();
+    void handleSetDisplayMode();
     // void handleRoot();
 
 public:

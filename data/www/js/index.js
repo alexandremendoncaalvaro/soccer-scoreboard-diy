@@ -22,6 +22,7 @@ if (document.readyState !== "loading") {
 }
 
 document.querySelector("#start").addEventListener("click", (e) => {
+  post("/starttimer", {})
   clearInterval(INTERVALO)
   INTERVALO = setInterval(() => {
     milissegundos()
@@ -43,10 +44,12 @@ function changeDisabledButtons(enable){
 }
 
 document.querySelector("#pause").addEventListener("click", (e) => {
+  post("/pausetimer", {})
   clearInterval(INTERVALO)
 })
 
 document.querySelector("#stop").addEventListener("click", (e) => {
+  post("/stoptimer", {})
   clearInterval(INTERVALO)
   resetCronometer()
   resetScoreboard()
@@ -94,15 +97,28 @@ function changeValue(tagId, newValue) {
 }
 
 function updateScore(tagId, newValue, isTeamA) {
-  currentScore = parseInt(document.querySelector(`#${tagId}`).textContent)
+  let currentScore = parseInt(document.querySelector(`#${tagId}`).textContent)
   if (currentScore == 0 && newValue == -1) {
     return 0
   }
 
-  newScore = currentScore += newValue
+  let newScore = (currentScore + newValue) % 100
   changeValue(tagId, newScore)
   return newScore
 }
+
+let displayMode = 'timer'
+
+document.querySelector("#toggle_display").addEventListener("click", () => {
+  displayMode = displayMode === 'timer' ? 'clock' : 'timer'
+  const btn = document.querySelector("#toggle_display")
+  if (displayMode === 'clock') {
+    btn.innerHTML = '<i class="fa fa-hourglass-half"></i> Exibir Cronômetro'
+  } else {
+    btn.innerHTML = '<i class="fa fa-clock-o"></i> Exibir Hora Atual'
+  }
+  post("/setdisplaymode", { "mode": displayMode })
+})
 
 const miliseg = document.querySelector('.milissegundos')
 const seg = document.querySelector('.segundos')
@@ -151,7 +167,7 @@ function minutos() {
     min.innerHTML = minNum
   }
 
-  if (horNum == 59) {
+  if (minNum == 59) {
     minNum = 0
     horas()
   }

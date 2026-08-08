@@ -1,13 +1,38 @@
 #include "SystemClock.h"
 
-bool SystemClock::begin(){
-    return printTime();
-}
-
-time_t SystemClock::getTime()
+bool SystemClock::begin()
 {
-    auto currentTime = now();
-    return currentTime;
+    tmElements_t tm;
+    if (RTC.read(tm))
+    {
+        if (_debug)
+        {
+            Serial.print(F("[RTC] "));
+            printTwoDigits(tm.Hour);
+            Serial.print(':');
+            printTwoDigits(tm.Minute);
+            Serial.print(':');
+            printTwoDigits(tm.Second);
+            Serial.println();
+        }
+        return true;
+    }
+
+    if (RTC.chipPresent())
+    {
+        // DS1307 presente mas oscilador parado (CH bit set); limpa o bit escrevendo tempo padrão
+        tmElements_t init = {};
+        init.Year = 2024 - 1970;
+        init.Month = 1;
+        init.Day = 1;
+        RTC.write(init);
+        if (_debug)
+            Serial.println(F("[RTC] DS1307 iniciado em 00:00 - sincronize via clock.html"));
+    }
+    else if (_debug)
+        Serial.println(F("[RTC] DS1307 não encontrado no barramento I2C"));
+
+    return true;
 }
 
 void SystemClock::printTwoDigits(int number)
@@ -57,6 +82,26 @@ bool SystemClock::printTime()
     return true;
 }
 
+bool SystemClock::readTime(int& hour, int& minute, int& second)
+{
+    tmElements_t tm;
+    if (!RTC.read(tm))
+    {
+        if (_debug)
+        {
+            if (RTC.chipPresent())
+                Serial.println(F("[RTC] DS1307 parado - sincronize via clock.html"));
+            else
+                Serial.println(F("[RTC] DS1307 não encontrado"));
+        }
+        return false;
+    }
+    hour = tm.Hour;
+    minute = tm.Minute;
+    second = tm.Second;
+    return true;
+}
+
 bool SystemClock::setDateTime(int year, int month, int day, int hour, int minute, int second)
 {
     tmElements_t timeElements;
@@ -69,11 +114,7 @@ bool SystemClock::setDateTime(int year, int month, int day, int hour, int minute
     timeElements.Minute = minute;
     timeElements.Second = second;
 
-    auto ret = RTC.write(timeElements);
-
-    delay(1000);
-
-    return ret;
+    return RTC.write(timeElements);
 }
 
 SystemClock systemClock;

@@ -12,8 +12,8 @@ private:
     void printTwoDigits(int number);
 public:
     void set_debug(bool debug) { _debug = debug; }
-    time_t getTime();
     bool printTime();
+    bool readTime(int& hour, int& minute, int& second);
     bool setDateTime(int year, int month, int day, int hour, int minute, int second);
     bool begin();
 };

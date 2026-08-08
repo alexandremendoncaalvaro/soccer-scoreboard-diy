@@ -1,7 +1,11 @@
 #pragma once
 
 #include <Arduino.h>
+// #define FASTLED_INTERRUPT_RETRY_COUNT 1
+// #define FASTLED_ALLOW_INTERRUPTS 0
 #include <FastLED.h>
+#include "ScoreboardClock.h"
+#include "TimeControl.h"
 
 namespace Digits
 {
@@ -14,6 +18,9 @@ namespace Digits
 
     const byte SEVEN_SEGMENTS = 7;
     const byte LEDS_PER_SEGMENT = 3;
+    const byte DOTS = 2;
+    const byte MAX_SCORE = 99;
+    const byte TOTAL_DIGITS = 8;
     const long DIGITS[] = {
         0b000111111111111111111, // [0] 0
         0b000111000000000000111, // [1] 1
@@ -36,14 +43,13 @@ class LedDisplay
 {
 private:
     bool _debug = false;
-
     CRGB _ledColorT1 = CRGB(255, 255, 255);
     CRGB _ledColorT2 = CRGB(255, 255, 255);
     CRGB _ledColorTm = CRGB(255, 255, 255);
     byte _ledBrightness = 100;
     byte _totalDigits = 8;
-    byte _totalLeds = _totalDigits * Digits::SEVEN_SEGMENTS * Digits::LEDS_PER_SEGMENT;
-    CRGB *leds = new CRGB[_totalLeds];
+    byte _totalLeds = _totalDigits * Digits::SEVEN_SEGMENTS * Digits::LEDS_PER_SEGMENT + Digits::DOTS;
+    CRGB leds[Digits::TOTAL_DIGITS * Digits::SEVEN_SEGMENTS * Digits::LEDS_PER_SEGMENT + Digits::DOTS];
     unsigned long _updatesPerSecond = 100;
     unsigned long _previousMillis = 0;
 
@@ -54,6 +60,7 @@ private:
 
     byte get_FirstDigit(byte score);
     byte get_SecondDigit(byte score);
+    void testLeds();
 
 public:
     void set_debug(bool debug) { _debug = debug; }
@@ -69,12 +76,16 @@ public:
 
     void updateLeds();
 
-    void displayNumber(byte number, byte segment, CRGB color, boolean isFirstDigit);
+    void displayNumber(byte number, byte segment, CRGB color, boolean blackIfZero);
 
     void set_ScoreTeamA(byte newScore);
     byte get_ScoreTeamA();
     void set_ScoreTeamB(byte newScore);
     byte get_ScoreTeamB();
+
+    bool dotsAreOff = true;
+    void blinkDots();
+    void set_Time();
 };
 
 extern LedDisplay ledDisplay;

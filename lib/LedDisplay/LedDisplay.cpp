@@ -4,7 +4,9 @@ using namespace Digits;
 
 bool LedDisplay::begin()
 {
-    return begin(D3);
+    bool initiated = begin(D3);
+    if (initiated) testLeds();
+    return initiated;
 }
 
 bool LedDisplay::begin(uint8_t ledPin)
@@ -37,10 +39,26 @@ bool LedDisplay::begin(uint8_t ledPin)
         return false;
         break;
     }
-    // FastLED.setBrightness(_ledBrightness);
-    // setAllColors(CRGB::Black);
-    // updateLeds();
+    setAllColors(CRGB::Black);
+    FastLED.setBrightness(0);
+    FastLED.show();
     return true;
+}
+
+void LedDisplay::testLeds()
+{
+    Serial.print("Total Leds: ");
+    Serial.println(_totalLeds);
+
+    FastLED.setBrightness(_ledBrightness);
+    for (int i = 0; i < _totalLeds; i++)
+    {
+        leds[i] = CRGB::Red;
+        FastLED.show();
+        delay(88);
+    }
+
+    Serial.println("Tests were finished!");
 }
 
 void LedDisplay::setAllColors(CRGB ledColor)
@@ -53,39 +71,22 @@ void LedDisplay::setAllColors(CRGB ledColor)
 
 void LedDisplay::setSeparatedColors()
 {
-    byte score = get_ScoreTeamA();    
+    byte score = get_ScoreTeamA();
     byte firstDigit = get_FirstDigit(score);
     byte secondDigit = get_SecondDigit(score);
     displayNumber(secondDigit, 6, _ledColorT1, false);
     displayNumber(firstDigit, 7, _ledColorT1, true);
-    displayNumber(secondDigit, 2, _ledColorT1, false);
-    displayNumber(firstDigit, 3, _ledColorT1, true);
 
     score = get_ScoreTeamB();
     firstDigit = get_FirstDigit(score);
     secondDigit = get_SecondDigit(score);
     displayNumber(secondDigit, 4, _ledColorT2, false);
     displayNumber(firstDigit, 5, _ledColorT2, true);
-    displayNumber(secondDigit, 0, _ledColorT2, false);
-    displayNumber(firstDigit, 1, _ledColorT2, true);
-    
-    //displayNumber(get_Time(), 2, _ledColorTm);
-    
-    // for (int i = 0; i < 10; i++)
-    // {
-    //     leds[i] = _ledColorT1;
-    // }
-    // for (int i = 10; i < 20; i++)
-    // {
-    //     leds[i] = _ledColorT2;
-    // }
-    // for (int i = 20; i < _totalLeds; i++)
-    // {
-    //     leds[i] = _ledColorTm;
-    // }
+
+    scoreboardClock.updateTime();
 }
 
-byte LedDisplay::get_FirstDigit(byte score) 
+byte LedDisplay::get_FirstDigit(byte score)
 {
     return score / 10 % 10;
 }
@@ -188,9 +189,10 @@ void LedDisplay::displayNumber(byte number, byte segment, CRGB color, boolean bl
     // bottom segment from left to right: 3, 2, 1, 0
 
     color = blackIfZero && number == 0 ? CRGB::Black : color;
-    byte startindex = segment < 2 ? (segment * 21) : (segment * 21) + 2;
+    byte ledsPerDigit = Digits::LEDS_PER_SEGMENT * Digits::SEVEN_SEGMENTS;
+    byte startindex = segment < 2 ? (segment * ledsPerDigit) : (segment * ledsPerDigit) + Digits::DOTS;
 
-    for (byte i = 0; i < 21; i++)
+    for (byte i = 0; i < ledsPerDigit; i++)
     {
         yield();
         leds[i + startindex] = ((DIGITS[number] & 1 << i) == 1 << i) ? color : CRGB::Black;
@@ -199,12 +201,14 @@ void LedDisplay::displayNumber(byte number, byte segment, CRGB color, boolean bl
 
 void LedDisplay::set_ScoreTeamA(byte score)
 {
-    scoreTeamA = score > 99 ? 99 : score;
+    scoreTeamA = score > Digits::MAX_SCORE ? Digits::MAX_SCORE : score;
+    updateLeds();
 }
 
 void LedDisplay::set_ScoreTeamB(byte score)
 {
-    scoreTeamB = score > 99 ? 99 : score;
+    scoreTeamB = score > Digits::MAX_SCORE ? Digits::MAX_SCORE : score;
+    updateLeds();
 }
 
 byte LedDisplay::get_ScoreTeamA()
@@ -215,6 +219,45 @@ byte LedDisplay::get_ScoreTeamA()
 byte LedDisplay::get_ScoreTeamB()
 {
     return scoreTeamB;
+}
+
+void LedDisplay::blinkDots()
+{
+    dotsAreOff = !dotsAreOff;
+    CRGB color = dotsAreOff ? CRGB::Black : _ledColorTm;
+    leds[42] = color;
+    leds[43] = color;
+    yield();
+}
+
+void LedDisplay::set_Time()
+{
+    // if (_debug) {
+    //     Serial.print(timeControl.h1);
+    //     Serial.print(timeControl.h2);
+    //     Serial.print(":");
+    //     Serial.print(timeControl.m1);
+    //     Serial.print(timeControl.m2);
+    //     Serial.print(":");
+    //     Serial.print(timeControl.s1);
+    //     Serial.println(timeControl.s2);
+    // }
+
+    if (timeControl.h1 > 0 || timeControl.h2 > 0)
+    {
+        displayNumber(timeControl.h1, 3, _ledColorTm, true);
+        displayNumber(timeControl.h2, 2, _ledColorTm, false);
+        displayNumber(timeControl.m1, 1, _ledColorTm, false);
+        displayNumber(timeControl.m2, 0, _ledColorTm, false);
+    }
+    else
+    {
+        displayNumber(timeControl.m1, 3, _ledColorTm, true);
+        displayNumber(timeControl.m2, 2, _ledColorTm, false);
+        displayNumber(timeControl.s1, 1, _ledColorTm, false);
+        displayNumber(timeControl.s2, 0, _ledColorTm, false);
+    }
+    yield();
 }
 
 LedDisplay ledDisplay;

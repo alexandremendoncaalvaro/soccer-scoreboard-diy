@@ -33,7 +33,7 @@ bool FileSystem::begin()
     return true;
 }
 
-DynamicJsonDocument FileSystem::jsonToDocument(String json, size_t capacity)
+DynamicJsonDocument FileSystem::jsonToDocument(const String& json, size_t capacity)
 {
     DynamicJsonDocument doc(capacity);
     auto deserializationError = deserializeJson(doc, json);
@@ -52,14 +52,20 @@ DynamicJsonDocument FileSystem::jsonToDocument(String json, size_t capacity)
 bool FileSystem::saveSettings(String payload)
 {
     File configFile = LittleFS.open("/settings.json", "w");
+    if (!configFile)
+    {
+        if (_debug)
+            Serial.println(F("[FILESYSTEM] Failed to open settings file for writing"));
+        return false;
+    }
     size_t size = configFile.print(payload);
+    configFile.close();
     if (size == 0)
     {
         if (_debug)
             Serial.println(F("[FILESYSTEM] Error saving settings!"));
         return false;
     }
-    configFile.close();
     return true;
 }
 
@@ -79,6 +85,7 @@ String FileSystem::loadSettings()
     {
         if (_debug)
             Serial.println(F("[FILESYSTEM] Config file size is too large"));
+        configFile.close();
         return "";
     }
 

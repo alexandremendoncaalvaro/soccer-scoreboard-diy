@@ -8,14 +8,15 @@ void setup()
     if(!wifiPortal.begin()){ return; };
     if(!ledDisplay.begin()){ return; };
     if(!irRemote.begin()){ return; }
+    if(!scoreboardClock.begin()){ return; };
     BasicSettings::LoadSettings();
 }
 
 void loop()
 {
     wifiPortal.handleClient();
-    ledDisplay.updateLeds();
     irRemote.process();
+    ledDisplay.updateLeds();
 }
 
 namespace BasicSettings
@@ -28,18 +29,17 @@ namespace BasicSettings
         wifiPortal.set_debug(_debug);
         ledDisplay.set_debug(_debug);
         irRemote.set_debug(_debug);
+        scoreboardClock.set_debug(_debug);
     }
 
     void SerialBegin(unsigned long baudrate)
     {
         Serial.begin(baudrate);
+        systemClock.begin();
         if (_debug)
         {
             Serial.println(F("[SYSTEM] Serial Ok!"));
             Serial.println();
-
-            Serial.println(F("[SYSTEM] Checking system Real Time Clock..."));
-            systemClock.begin();
         }
     }
 
