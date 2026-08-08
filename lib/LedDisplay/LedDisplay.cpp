@@ -4,8 +4,9 @@ using namespace Digits;
 
 bool LedDisplay::begin()
 {
-    bool initiated = begin(D3);
-    if (initiated) testLeds();
+    bool initiated = begin(D5);
+    if (initiated)
+        testLeds();
     return initiated;
 }
 
