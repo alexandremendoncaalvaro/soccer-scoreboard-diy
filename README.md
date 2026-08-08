@@ -5,9 +5,7 @@ A DIY soccer scoreboard project.
 
 The idea is to build a Soccer Scoreboard with a RGB addressable LED strip to create the digits.  
 The scoreboard should show the SCORE and TIME, that you can choose between a countdown clock or a real-time clock.  
-There are two options to change parameters and control the game score:  
-- Infrared Remote Controller
-- Portal accessed by ad-hoc Wifi connection
+You can change parameters and control the game score via a portal accessed by ad-hoc Wifi connection.
 
 # Board Construction
 
@@ -16,7 +14,6 @@ There are two options to change parameters and control the game score:
 | -------------                         | ----- |
 |ESP8266 Board                          | 1x    |
 |DS1307 Tiny RTC I2C                    | 1x    |
-|IR Remote Controller + IR Receptor     | 1x    |
 |Micro USB cable                        | 1x    |
 |5V 2.5A power supply                   | 1x    |
 |WS2812B LED Strip 60 LED's per meter   | 3m    |
